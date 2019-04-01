@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		9E19AE381E8DFCFC2D9B1919 /* Pods_InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287D178ED5709A309905ED85 /* Pods_InsertDyld.framework */; };
 		A95052B02251FE9000BFBC53 /* InsertDyld.h in Headers */ = {isa = PBXBuildFile; fileRef = A95052AE2251FE9000BFBC53 /* InsertDyld.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A95052B72251FEBE00BFBC53 /* InserDyldFishHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95052B62251FEBE00BFBC53 /* InserDyldFishHook.swift */; };
+		A95052B72251FEBE00BFBC53 /* FishHookTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95052B62251FEBE00BFBC53 /* FishHookTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,7 +18,7 @@
 		A95052AB2251FE9000BFBC53 /* InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95052AE2251FE9000BFBC53 /* InsertDyld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InsertDyld.h; sourceTree = "<group>"; };
 		A95052AF2251FE9000BFBC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A95052B62251FEBE00BFBC53 /* InserDyldFishHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InserDyldFishHook.swift; sourceTree = "<group>"; };
+		A95052B62251FEBE00BFBC53 /* FishHookTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishHookTest.swift; sourceTree = "<group>"; };
 		E6249167321D0F899E89EA65 /* Pods-InsertDyld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InsertDyld.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-InsertDyld/Pods-InsertDyld.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,7 +66,7 @@
 			children = (
 				A95052AE2251FE9000BFBC53 /* InsertDyld.h */,
 				A95052AF2251FE9000BFBC53 /* Info.plist */,
-				A95052B62251FEBE00BFBC53 /* InserDyldFishHook.swift */,
+				A95052B62251FEBE00BFBC53 /* FishHookTest.swift */,
 			);
 			path = InsertDyld;
 			sourceTree = "<group>";
@@ -184,7 +184,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A95052B72251FEBE00BFBC53 /* InserDyldFishHook.swift in Sources */,
+				A95052B72251FEBE00BFBC53 /* FishHookTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

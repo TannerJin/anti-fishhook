@@ -8,7 +8,7 @@
 
 import Foundation
 import MachO
-import fishhookProtection
+import antiFishhook
 
 // fishhook NSLog
 public func fishhookNSLog(newMethod: UnsafeMutableRawPointer) {

@@ -8,7 +8,7 @@
 
 import Foundation
 import MachO
-import fishhookProtection
+import antiFishhook
 
 // protect
 public func protectNSLog() {

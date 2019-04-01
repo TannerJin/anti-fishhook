@@ -16,7 +16,7 @@
 		A95051E72248B6B000BFBC53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A95051E62248B6B000BFBC53 /* Assets.xcassets */; };
 		A95051EA2248B6B000BFBC53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95051E82248B6B000BFBC53 /* LaunchScreen.storyboard */; };
 		A95051F42248B71700BFBC53 /* TestHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = A95051F32248B71700BFBC53 /* TestHelp.m */; };
-		A950526B2250991900BFBC53 /* FishHookProtectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A950526A2250991900BFBC53 /* FishHookProtectTest.swift */; };
+		A950526B2250991900BFBC53 /* AntiFishHookTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A950526A2250991900BFBC53 /* AntiFishHookTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,7 +46,7 @@
 		A95051F12248B71600BFBC53 /* FishHookProtect-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FishHookProtect-Bridging-Header.h"; sourceTree = "<group>"; };
 		A95051F22248B71700BFBC53 /* TestHelp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestHelp.h; sourceTree = "<group>"; };
 		A95051F32248B71700BFBC53 /* TestHelp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestHelp.m; sourceTree = "<group>"; };
-		A950526A2250991900BFBC53 /* FishHookProtectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FishHookProtectTest.swift; sourceTree = "<group>"; };
+		A950526A2250991900BFBC53 /* AntiFishHookTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AntiFishHookTest.swift; sourceTree = "<group>"; };
 		D2A3EF08710C56A9E5DD457F /* Pods-FishHookProtect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishHookProtect.release.xcconfig"; path = "Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect.release.xcconfig"; sourceTree = "<group>"; };
 		EE04D5A4349228663001A630 /* Pods_FishHookProtect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FishHookProtect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -100,7 +100,7 @@
 				A95051E62248B6B000BFBC53 /* Assets.xcassets */,
 				A95051E82248B6B000BFBC53 /* LaunchScreen.storyboard */,
 				A95051EB2248B6B000BFBC53 /* Info.plist */,
-				A950526A2250991900BFBC53 /* FishHookProtectTest.swift */,
+				A950526A2250991900BFBC53 /* AntiFishHookTest.swift */,
 				A95051F22248B71700BFBC53 /* TestHelp.h */,
 				A95051F32248B71700BFBC53 /* TestHelp.m */,
 				A95051F12248B71600BFBC53 /* FishHookProtect-Bridging-Header.h */,
@@ -219,13 +219,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/fishhookProtection/fishhookProtection.framework",
+				"${BUILT_PRODUCTS_DIR}/antiFishhook/antiFishhook.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/fishhookProtection.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/antiFishhook.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -241,7 +241,7 @@
 			files = (
 				A95051F42248B71700BFBC53 /* TestHelp.m in Sources */,
 				A95051E22248B6AE00BFBC53 /* ViewController.swift in Sources */,
-				A950526B2250991900BFBC53 /* FishHookProtectTest.swift in Sources */,
+				A950526B2250991900BFBC53 /* AntiFishHookTest.swift in Sources */,
 				A95051E02248B6AE00BFBC53 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
