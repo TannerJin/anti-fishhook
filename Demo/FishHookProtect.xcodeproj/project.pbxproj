@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1AB4AFE34D75E8224C59C9D9 /* Pods_FishHookProtect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD873BA27320BA185F659A9 /* Pods_FishHookProtect.framework */; };
 		A9450EDE22522C7400658841 /* InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9450EDD22522C7400658841 /* InsertDyld.framework */; };
 		A9450EDF22522C7400658841 /* InsertDyld.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9450EDD22522C7400658841 /* InsertDyld.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A95051E02248B6AE00BFBC53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95051DF2248B6AE00BFBC53 /* AppDelegate.swift */; };
@@ -35,7 +34,6 @@
 
 /* Begin PBXFileReference section */
 		81F286D4E663FA4F76A459FB /* Pods-FishHookProtect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishHookProtect.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect.debug.xcconfig"; sourceTree = "<group>"; };
-		9CD873BA27320BA185F659A9 /* Pods_FishHookProtect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FishHookProtect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9450EDD22522C7400658841 /* InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95051DC2248B6AE00BFBC53 /* FishHookProtect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishHookProtect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95051DF2248B6AE00BFBC53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,7 +55,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9450EDE22522C7400658841 /* InsertDyld.framework in Frameworks */,
-				1AB4AFE34D75E8224C59C9D9 /* Pods_FishHookProtect.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +64,6 @@
 		0CB464D419EFF980807349B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9CD873BA27320BA185F659A9 /* Pods_FishHookProtect.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

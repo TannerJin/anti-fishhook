@@ -75,11 +75,12 @@ public func resetSymbol(_ symbol: [UInt8],
         }
         
         var index: Int?
+        var newSymbol = [0x5f] + symbol
         for i in 0..<arrBytes.count {
-            if i < (arrBytes.count - symbol.count), arrBytes[i] == UInt8(0x5f) {
+            if i < (arrBytes.count - newSymbol.count), arrBytes[i] == UInt8(0x5f) {
                 var contains = true
                 for j in 0..<symbol.count {
-                    if arrBytes[i+j] != symbol[j] {
+                    if arrBytes[i+j] != newSymbol[j] {
                         contains = false
                     }
                 }
