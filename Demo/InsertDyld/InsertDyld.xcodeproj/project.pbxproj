@@ -7,78 +7,74 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		24E0A99E40C943DC101E179D /* Pods_BaseTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C735E6726D2CF128FB11D59E /* Pods_BaseTest.framework */; };
-		A950527B22509EB200BFBC53 /* BaseTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A950527922509EB200BFBC53 /* BaseTest.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A950528222509ED900BFBC53 /* FishHookDladdrTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A950528122509ED900BFBC53 /* FishHookDladdrTest.swift */; };
-		A95052A02251DD5F00BFBC53 /* fishhookProtection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A950529F2251DD5F00BFBC53 /* fishhookProtection.framework */; };
+		9E19AE381E8DFCFC2D9B1919 /* Pods_InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287D178ED5709A309905ED85 /* Pods_InsertDyld.framework */; };
+		A95052B02251FE9000BFBC53 /* InsertDyld.h in Headers */ = {isa = PBXBuildFile; fileRef = A95052AE2251FE9000BFBC53 /* InsertDyld.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A95052B72251FEBE00BFBC53 /* InserDyldFishHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95052B62251FEBE00BFBC53 /* InserDyldFishHook.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0D9A5D3C1A0C12DAFB01E562 /* Pods-BaseTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaseTest.release.xcconfig"; path = "../Pods/Target Support Files/Pods-BaseTest/Pods-BaseTest.release.xcconfig"; sourceTree = "<group>"; };
-		A950527622509EB200BFBC53 /* BaseTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaseTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A950527922509EB200BFBC53 /* BaseTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTest.h; sourceTree = "<group>"; };
-		A950527A22509EB200BFBC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A950528122509ED900BFBC53 /* FishHookDladdrTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishHookDladdrTest.swift; sourceTree = "<group>"; };
-		A950529F2251DD5F00BFBC53 /* fishhookProtection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = fishhookProtection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C735E6726D2CF128FB11D59E /* Pods_BaseTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaseTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF11E299C8E27C466209FAD1 /* Pods-BaseTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaseTest.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-BaseTest/Pods-BaseTest.debug.xcconfig"; sourceTree = "<group>"; };
+		0729E6988353829E18A5ADBE /* Pods-InsertDyld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InsertDyld.release.xcconfig"; path = "../Pods/Target Support Files/Pods-InsertDyld/Pods-InsertDyld.release.xcconfig"; sourceTree = "<group>"; };
+		287D178ED5709A309905ED85 /* Pods_InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A95052AB2251FE9000BFBC53 /* InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A95052AE2251FE9000BFBC53 /* InsertDyld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InsertDyld.h; sourceTree = "<group>"; };
+		A95052AF2251FE9000BFBC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A95052B62251FEBE00BFBC53 /* InserDyldFishHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InserDyldFishHook.swift; sourceTree = "<group>"; };
+		E6249167321D0F899E89EA65 /* Pods-InsertDyld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InsertDyld.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-InsertDyld/Pods-InsertDyld.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A950527322509EB200BFBC53 /* Frameworks */ = {
+		A95052A82251FE9000BFBC53 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A95052A02251DD5F00BFBC53 /* fishhookProtection.framework in Frameworks */,
-				24E0A99E40C943DC101E179D /* Pods_BaseTest.framework in Frameworks */,
+				9E19AE381E8DFCFC2D9B1919 /* Pods_InsertDyld.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		812F9481F2CE1FC6503B3A50 /* Pods */ = {
+		4B1BEF7BD88FAB1154E867DE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FF11E299C8E27C466209FAD1 /* Pods-BaseTest.debug.xcconfig */,
-				0D9A5D3C1A0C12DAFB01E562 /* Pods-BaseTest.release.xcconfig */,
+				E6249167321D0F899E89EA65 /* Pods-InsertDyld.debug.xcconfig */,
+				0729E6988353829E18A5ADBE /* Pods-InsertDyld.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		A950526C22509EB200BFBC53 = {
+		A95052A12251FE9000BFBC53 = {
 			isa = PBXGroup;
 			children = (
-				A950527822509EB200BFBC53 /* BaseTest */,
-				A950527722509EB200BFBC53 /* Products */,
-				A950529E2251DD5F00BFBC53 /* Frameworks */,
-				812F9481F2CE1FC6503B3A50 /* Pods */,
+				A95052AD2251FE9000BFBC53 /* InsertDyld */,
+				A95052AC2251FE9000BFBC53 /* Products */,
+				AC4EFFF0F09E5DC5F75798B9 /* Frameworks */,
+				4B1BEF7BD88FAB1154E867DE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
-		A950527722509EB200BFBC53 /* Products */ = {
+		A95052AC2251FE9000BFBC53 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A950527622509EB200BFBC53 /* BaseTest.framework */,
+				A95052AB2251FE9000BFBC53 /* InsertDyld.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A950527822509EB200BFBC53 /* BaseTest */ = {
+		A95052AD2251FE9000BFBC53 /* InsertDyld */ = {
 			isa = PBXGroup;
 			children = (
-				A950527922509EB200BFBC53 /* BaseTest.h */,
-				A950527A22509EB200BFBC53 /* Info.plist */,
-				A950528122509ED900BFBC53 /* FishHookDladdrTest.swift */,
+				A95052AE2251FE9000BFBC53 /* InsertDyld.h */,
+				A95052AF2251FE9000BFBC53 /* Info.plist */,
+				A95052B62251FEBE00BFBC53 /* InserDyldFishHook.swift */,
 			);
-			path = BaseTest;
+			path = InsertDyld;
 			sourceTree = "<group>";
 		};
-		A950529E2251DD5F00BFBC53 /* Frameworks */ = {
+		AC4EFFF0F09E5DC5F75798B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A950529F2251DD5F00BFBC53 /* fishhookProtection.framework */,
-				C735E6726D2CF128FB11D59E /* Pods_BaseTest.framework */,
+				287D178ED5709A309905ED85 /* Pods_InsertDyld.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -86,70 +82,70 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		A950527122509EB200BFBC53 /* Headers */ = {
+		A95052A62251FE9000BFBC53 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A950527B22509EB200BFBC53 /* BaseTest.h in Headers */,
+				A95052B02251FE9000BFBC53 /* InsertDyld.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		A950527522509EB200BFBC53 /* BaseTest */ = {
+		A95052AA2251FE9000BFBC53 /* InsertDyld */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A950527E22509EB200BFBC53 /* Build configuration list for PBXNativeTarget "BaseTest" */;
+			buildConfigurationList = A95052B32251FE9000BFBC53 /* Build configuration list for PBXNativeTarget "InsertDyld" */;
 			buildPhases = (
-				9F5466ED1EFEF7D88391AC4F /* [CP] Check Pods Manifest.lock */,
-				A950527122509EB200BFBC53 /* Headers */,
-				A950527222509EB200BFBC53 /* Sources */,
-				A950527322509EB200BFBC53 /* Frameworks */,
-				A950527422509EB200BFBC53 /* Resources */,
+				510C04264F59DA5CB432AC4D /* [CP] Check Pods Manifest.lock */,
+				A95052A62251FE9000BFBC53 /* Headers */,
+				A95052A72251FE9000BFBC53 /* Sources */,
+				A95052A82251FE9000BFBC53 /* Frameworks */,
+				A95052A92251FE9000BFBC53 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = BaseTest;
-			productName = BaseTest;
-			productReference = A950527622509EB200BFBC53 /* BaseTest.framework */;
+			name = InsertDyld;
+			productName = InsertDyld;
+			productReference = A95052AB2251FE9000BFBC53 /* InsertDyld.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		A950526D22509EB200BFBC53 /* Project object */ = {
+		A95052A22251FE9000BFBC53 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = jintao;
 				TargetAttributes = {
-					A950527522509EB200BFBC53 = {
+					A95052AA2251FE9000BFBC53 = {
 						CreatedOnToolsVersion = 10.0;
 						LastSwiftMigration = 1000;
 					};
 				};
 			};
-			buildConfigurationList = A950527022509EB200BFBC53 /* Build configuration list for PBXProject "BaseTest" */;
+			buildConfigurationList = A95052A52251FE9000BFBC53 /* Build configuration list for PBXProject "InsertDyld" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = A950526C22509EB200BFBC53;
-			productRefGroup = A950527722509EB200BFBC53 /* Products */;
+			mainGroup = A95052A12251FE9000BFBC53;
+			productRefGroup = A95052AC2251FE9000BFBC53 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A950527522509EB200BFBC53 /* BaseTest */,
+				A95052AA2251FE9000BFBC53 /* InsertDyld */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A950527422509EB200BFBC53 /* Resources */ = {
+		A95052A92251FE9000BFBC53 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -159,7 +155,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9F5466ED1EFEF7D88391AC4F /* [CP] Check Pods Manifest.lock */ = {
+		510C04264F59DA5CB432AC4D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -174,7 +170,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BaseTest-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-InsertDyld-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -184,18 +180,18 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A950527222509EB200BFBC53 /* Sources */ = {
+		A95052A72251FE9000BFBC53 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A950528222509ED900BFBC53 /* FishHookDladdrTest.swift in Sources */,
+				A95052B72251FEBE00BFBC53 /* InserDyldFishHook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		A950527C22509EB200BFBC53 /* Debug */ = {
+		A95052B12251FE9000BFBC53 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -259,7 +255,7 @@
 			};
 			name = Debug;
 		};
-		A950527D22509EB200BFBC53 /* Release */ = {
+		A95052B22251FE9000BFBC53 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -317,9 +313,9 @@
 			};
 			name = Release;
 		};
-		A950527F22509EB200BFBC53 /* Debug */ = {
+		A95052B42251FE9000BFBC53 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FF11E299C8E27C466209FAD1 /* Pods-BaseTest.debug.xcconfig */;
+			baseConfigurationReference = E6249167321D0F899E89EA65 /* Pods-InsertDyld.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -329,14 +325,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = BaseTest/Info.plist;
+				INFOPLIST_FILE = InsertDyld/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jin.BaseTest;
+				PRODUCT_BUNDLE_IDENTIFIER = jin.InsertDyld;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -345,9 +341,9 @@
 			};
 			name = Debug;
 		};
-		A950528022509EB200BFBC53 /* Release */ = {
+		A95052B52251FE9000BFBC53 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D9A5D3C1A0C12DAFB01E562 /* Pods-BaseTest.release.xcconfig */;
+			baseConfigurationReference = 0729E6988353829E18A5ADBE /* Pods-InsertDyld.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -357,14 +353,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = BaseTest/Info.plist;
+				INFOPLIST_FILE = InsertDyld/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jin.BaseTest;
+				PRODUCT_BUNDLE_IDENTIFIER = jin.InsertDyld;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -375,25 +371,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A950527022509EB200BFBC53 /* Build configuration list for PBXProject "BaseTest" */ = {
+		A95052A52251FE9000BFBC53 /* Build configuration list for PBXProject "InsertDyld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A950527C22509EB200BFBC53 /* Debug */,
-				A950527D22509EB200BFBC53 /* Release */,
+				A95052B12251FE9000BFBC53 /* Debug */,
+				A95052B22251FE9000BFBC53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A950527E22509EB200BFBC53 /* Build configuration list for PBXNativeTarget "BaseTest" */ = {
+		A95052B32251FE9000BFBC53 /* Build configuration list for PBXNativeTarget "InsertDyld" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A950527F22509EB200BFBC53 /* Debug */,
-				A950528022509EB200BFBC53 /* Release */,
+				A95052B42251FE9000BFBC53 /* Debug */,
+				A95052B52251FE9000BFBC53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = A950526D22509EB200BFBC53 /* Project object */;
+	rootObject = A95052A22251FE9000BFBC53 /* Project object */;
 }

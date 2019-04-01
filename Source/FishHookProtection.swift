@@ -76,7 +76,7 @@ public func resetSymbol(_ symbol: [UInt8],
         
         var index: Int?
         for i in 0..<arrBytes.count {
-            if i < (arrBytes.count - symbol.count) {
+            if i < (arrBytes.count - symbol.count), arrBytes[i] == UInt8(0x5f) {
                 var contains = true
                 for j in 0..<symbol.count {
                     if arrBytes[i+j] != symbol[j] {
@@ -91,7 +91,7 @@ public func resetSymbol(_ symbol: [UInt8],
         }
         
         if index != nil {
-            resetSymbolByVoid(symbol: symbol, image: image, imageSlide: slide, offset: index! - 6)
+            resetSymbolByVoid(symbol: symbol, image: image, imageSlide: slide, offset: index! - 5)
         }
     }
     

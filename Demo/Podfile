@@ -7,8 +7,8 @@ target 'FishHookProtect' do
   pod 'fishhookProtection'
 end
 
-target 'BaseTest' do
+target 'InsertDyld' do
     use_frameworks!
     pod 'fishhookProtection'
-    project 'BaseTest/BaseTest.xcodeproj'
+    project 'InsertDyld/InsertDyld.xcodeproj'
 end
