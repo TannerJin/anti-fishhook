@@ -1,16 +1,16 @@
 PODS:
-  - fishhookProtection (0.2.0)
+  - fishhookProtection (0.4.0)
 
 DEPENDENCIES:
-  - fishhookProtection
+  - fishhookProtection (= 0.4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - fishhookProtection
 
 SPEC CHECKSUMS:
-  fishhookProtection: fce81d5aa4f428dc0eaf49b00d752b9ea99e7ed4
+  fishhookProtection: f85412cf9fd60d35ef2d2a6c36588beeef11e671
 
-PODFILE CHECKSUM: de968311cf2b0e28dd08b0dcaddcd6075d133251
+PODFILE CHECKSUM: bf96b08ce985f2f5318e3896933e20843d0322ae
 
 COCOAPODS: 1.5.3
