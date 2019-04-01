@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("origation: ")
         // origation
-        TestHelp.nslog("origation: Hello, World")
+        NSLog("origation: Hello, World")
         verificationDyld()
         
         // fishhook
@@ -27,16 +27,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("\nverifiacate fishhook: ")
         // verifiacate fishhook
-        TestHelp.nslog("verifiacate fishhook: Hello, World")
+        NSLog("verifiacate fishhook: Hello, World")
         verificationDyld()
         
         // fishhook protect
         protectNSLog()
         protectDladdr()
         
-        print("\nverifiacate fishhook protect: ")
+        print("\nverifiacate anti-fishhook : ")
         // verifiacate fishhook protect
-        TestHelp.nslog("verifiacate fishhook protect: Hello, World")
+        NSLog("verifiacate anti-fishhook: Hello, World")
         verificationDyld()
         
         return true

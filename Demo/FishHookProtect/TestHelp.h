@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void *)getNewNSLogMehod;
 + (void *)getNewDladdrMethod;
-+ (void )nslog: (NSString *)str;
 
 @end
 

@@ -19,17 +19,13 @@
     return newDladdr;
 }
 
-+ (void )nslog: (NSString *)str {
-    NSLog(@"%@", str);
-}
-
-// hook NSlog的方法
+// new NSlog method
 void newNSLog(NSString *format, ...) {    
-    printf("FishHookProtect NSLog--------- 被fishhook了");
+    printf("NSLog --------- fishhook");
     printf("\n");
 }
 
-// hook Dladdr方法
+// new dladdr method
 int newDladdr(void* imp, Dl_info* info) {
     return -999;
 }

@@ -36,9 +36,9 @@ public func verificationDyld() {
     if let testImp = class_getMethodImplementation(BaseTest.self, #selector(BaseTest.baseTest)) {
         var info = Dl_info()
         if dladdr(UnsafeRawPointer(testImp), &info) == -999 {
-            print("BaseTest dladdr --------- 被fishhook了")
+            print("dladdr --------- fishhook")
         } else if dladdr(UnsafeRawPointer(testImp), &info) == 1 {
-            print("BaseTest dladdr fname---------",  String(cString: info.dli_fname))
+            print("dladdr fname---------",  String(cString: info.dli_fname))
         }
     }
 }
