@@ -10,5 +10,5 @@ __AntiFishhook__ is AntiHook library for [`fishhook`][fishhook] at runtime.
   import antiFishhook
 
   resetSymbol("NSLog")
-  NSLog("")
+  NSLog("Hello World")
 ```
