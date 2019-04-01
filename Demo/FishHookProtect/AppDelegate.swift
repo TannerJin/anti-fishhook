@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         /// FishHookProtect NSLog
         TestHelp.nslog("Hello")
-        fishhookNSLog()                   // fishhook NSLog
+        fishhookNSLog(newMethod: TestHelp.getNewNSLogMehod())                   // fishhook NSLog
         TestHelp.nslog("Tanner Jin")
         protectNSLog()                    // protect NSLog
         TestHelp.nslog("World")

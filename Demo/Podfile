@@ -1,0 +1,14 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+workspace 'FishHookProtect.xcworkspace'
+
+target 'FishHookProtect' do
+  use_frameworks!
+  pod 'fishhookProtection'
+end
+
+target 'BaseTest' do
+    use_frameworks!
+    pod 'fishhookProtection'
+    project 'BaseTest/BaseTest.xcodeproj'
+end

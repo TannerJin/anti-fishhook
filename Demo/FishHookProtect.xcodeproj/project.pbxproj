@@ -13,9 +13,10 @@
 		A95051E72248B6B000BFBC53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A95051E62248B6B000BFBC53 /* Assets.xcassets */; };
 		A95051EA2248B6B000BFBC53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95051E82248B6B000BFBC53 /* LaunchScreen.storyboard */; };
 		A95051F42248B71700BFBC53 /* TestHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = A95051F32248B71700BFBC53 /* TestHelp.m */; };
-		A950526B2250991900BFBC53 /* FishHookTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A950526A2250991900BFBC53 /* FishHookTest.swift */; };
+		A950526B2250991900BFBC53 /* FishHookNSLogTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A950526A2250991900BFBC53 /* FishHookNSLogTest.swift */; };
 		A950528422509F3B00BFBC53 /* BaseTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A950528322509F3B00BFBC53 /* BaseTest.framework */; };
 		A950528522509F3B00BFBC53 /* BaseTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A950528322509F3B00BFBC53 /* BaseTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C74714A4A5C7323D138EB406 /* Pods_FishHookProtect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DFCAF6BF739D23513015FC /* Pods_FishHookProtect.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		62DFCAF6BF739D23513015FC /* Pods_FishHookProtect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FishHookProtect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FDF33ED01395BA3CC18EE60 /* Pods-FishHookProtect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishHookProtect.release.xcconfig"; path = "Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect.release.xcconfig"; sourceTree = "<group>"; };
 		A95051DC2248B6AE00BFBC53 /* FishHookProtect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishHookProtect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95051DF2248B6AE00BFBC53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A95051E12248B6AE00BFBC53 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,8 +46,9 @@
 		A95051F12248B71600BFBC53 /* FishHookProtect-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FishHookProtect-Bridging-Header.h"; sourceTree = "<group>"; };
 		A95051F22248B71700BFBC53 /* TestHelp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestHelp.h; sourceTree = "<group>"; };
 		A95051F32248B71700BFBC53 /* TestHelp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestHelp.m; sourceTree = "<group>"; };
-		A950526A2250991900BFBC53 /* FishHookTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FishHookTest.swift; sourceTree = "<group>"; };
+		A950526A2250991900BFBC53 /* FishHookNSLogTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FishHookNSLogTest.swift; sourceTree = "<group>"; };
 		A950528322509F3B00BFBC53 /* BaseTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BaseTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA1DCBE64CA70C51696E2934 /* Pods-FishHookProtect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishHookProtect.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,18 +57,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				A950528422509F3B00BFBC53 /* BaseTest.framework in Frameworks */,
+				C74714A4A5C7323D138EB406 /* Pods_FishHookProtect.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0CB464D419EFF980807349B9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				62DFCAF6BF739D23513015FC /* Pods_FishHookProtect.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A95051D32248B6AE00BFBC53 = {
 			isa = PBXGroup;
 			children = (
 				A950528322509F3B00BFBC53 /* BaseTest.framework */,
 				A95051DE2248B6AE00BFBC53 /* FishHookProtect */,
 				A95051DD2248B6AE00BFBC53 /* Products */,
+				F4100E67A2DA6DE231DB5051 /* Pods */,
+				0CB464D419EFF980807349B9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,12 +100,21 @@
 				A95051E62248B6B000BFBC53 /* Assets.xcassets */,
 				A95051E82248B6B000BFBC53 /* LaunchScreen.storyboard */,
 				A95051EB2248B6B000BFBC53 /* Info.plist */,
-				A950526A2250991900BFBC53 /* FishHookTest.swift */,
+				A950526A2250991900BFBC53 /* FishHookNSLogTest.swift */,
 				A95051F22248B71700BFBC53 /* TestHelp.h */,
 				A95051F32248B71700BFBC53 /* TestHelp.m */,
 				A95051F12248B71600BFBC53 /* FishHookProtect-Bridging-Header.h */,
 			);
 			path = FishHookProtect;
+			sourceTree = "<group>";
+		};
+		F4100E67A2DA6DE231DB5051 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DA1DCBE64CA70C51696E2934 /* Pods-FishHookProtect.debug.xcconfig */,
+				8FDF33ED01395BA3CC18EE60 /* Pods-FishHookProtect.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -100,10 +124,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A95051EE2248B6B000BFBC53 /* Build configuration list for PBXNativeTarget "FishHookProtect" */;
 			buildPhases = (
+				82943A33A8D790D4C27DEC05 /* [CP] Check Pods Manifest.lock */,
 				A95051D82248B6AE00BFBC53 /* Sources */,
 				A95051D92248B6AE00BFBC53 /* Frameworks */,
 				A95051DA2248B6AE00BFBC53 /* Resources */,
 				A9505266225097C500BFBC53 /* Embed Frameworks */,
+				F31B5AE0AA5FA636E7AE658A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -161,6 +187,53 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		82943A33A8D790D4C27DEC05 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FishHookProtect-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F31B5AE0AA5FA636E7AE658A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/fishhookProtection-iOS11.0/fishhookProtection.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/fishhookProtection.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A95051D82248B6AE00BFBC53 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -168,7 +241,7 @@
 			files = (
 				A95051F42248B71700BFBC53 /* TestHelp.m in Sources */,
 				A95051E22248B6AE00BFBC53 /* ViewController.swift in Sources */,
-				A950526B2250991900BFBC53 /* FishHookTest.swift in Sources */,
+				A950526B2250991900BFBC53 /* FishHookNSLogTest.swift in Sources */,
 				A95051E02248B6AE00BFBC53 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,6 +386,7 @@
 		};
 		A95051EF2248B6B000BFBC53 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA1DCBE64CA70C51696E2934 /* Pods-FishHookProtect.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -336,6 +410,7 @@
 		};
 		A95051F02248B6B000BFBC53 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FDF33ED01395BA3CC18EE60 /* Pods-FishHookProtect.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

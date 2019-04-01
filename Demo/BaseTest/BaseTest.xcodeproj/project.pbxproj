@@ -7,15 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24E0A99E40C943DC101E179D /* Pods_BaseTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C735E6726D2CF128FB11D59E /* Pods_BaseTest.framework */; };
 		A950527B22509EB200BFBC53 /* BaseTest.h in Headers */ = {isa = PBXBuildFile; fileRef = A950527922509EB200BFBC53 /* BaseTest.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A950528222509ED900BFBC53 /* FishHookTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A950528122509ED900BFBC53 /* FishHookTest.swift */; };
+		A950528222509ED900BFBC53 /* FishHookDladdrTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A950528122509ED900BFBC53 /* FishHookDladdrTest.swift */; };
+		A95052A02251DD5F00BFBC53 /* fishhookProtection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A950529F2251DD5F00BFBC53 /* fishhookProtection.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D9A5D3C1A0C12DAFB01E562 /* Pods-BaseTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaseTest.release.xcconfig"; path = "../Pods/Target Support Files/Pods-BaseTest/Pods-BaseTest.release.xcconfig"; sourceTree = "<group>"; };
 		A950527622509EB200BFBC53 /* BaseTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BaseTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A950527922509EB200BFBC53 /* BaseTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTest.h; sourceTree = "<group>"; };
 		A950527A22509EB200BFBC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A950528122509ED900BFBC53 /* FishHookTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishHookTest.swift; sourceTree = "<group>"; };
+		A950528122509ED900BFBC53 /* FishHookDladdrTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishHookDladdrTest.swift; sourceTree = "<group>"; };
+		A950529F2251DD5F00BFBC53 /* fishhookProtection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = fishhookProtection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C735E6726D2CF128FB11D59E /* Pods_BaseTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaseTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF11E299C8E27C466209FAD1 /* Pods-BaseTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaseTest.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-BaseTest/Pods-BaseTest.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -23,17 +29,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A95052A02251DD5F00BFBC53 /* fishhookProtection.framework in Frameworks */,
+				24E0A99E40C943DC101E179D /* Pods_BaseTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		812F9481F2CE1FC6503B3A50 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FF11E299C8E27C466209FAD1 /* Pods-BaseTest.debug.xcconfig */,
+				0D9A5D3C1A0C12DAFB01E562 /* Pods-BaseTest.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		A950526C22509EB200BFBC53 = {
 			isa = PBXGroup;
 			children = (
 				A950527822509EB200BFBC53 /* BaseTest */,
 				A950527722509EB200BFBC53 /* Products */,
+				A950529E2251DD5F00BFBC53 /* Frameworks */,
+				812F9481F2CE1FC6503B3A50 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -50,9 +69,18 @@
 			children = (
 				A950527922509EB200BFBC53 /* BaseTest.h */,
 				A950527A22509EB200BFBC53 /* Info.plist */,
-				A950528122509ED900BFBC53 /* FishHookTest.swift */,
+				A950528122509ED900BFBC53 /* FishHookDladdrTest.swift */,
 			);
 			path = BaseTest;
+			sourceTree = "<group>";
+		};
+		A950529E2251DD5F00BFBC53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A950529F2251DD5F00BFBC53 /* fishhookProtection.framework */,
+				C735E6726D2CF128FB11D59E /* Pods_BaseTest.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -73,6 +101,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A950527E22509EB200BFBC53 /* Build configuration list for PBXNativeTarget "BaseTest" */;
 			buildPhases = (
+				9F5466ED1EFEF7D88391AC4F /* [CP] Check Pods Manifest.lock */,
 				A950527122509EB200BFBC53 /* Headers */,
 				A950527222509EB200BFBC53 /* Sources */,
 				A950527322509EB200BFBC53 /* Frameworks */,
@@ -129,12 +158,37 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9F5466ED1EFEF7D88391AC4F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BaseTest-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A950527222509EB200BFBC53 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A950528222509ED900BFBC53 /* FishHookTest.swift in Sources */,
+				A950528222509ED900BFBC53 /* FishHookDladdrTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +319,7 @@
 		};
 		A950527F22509EB200BFBC53 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF11E299C8E27C466209FAD1 /* Pods-BaseTest.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -292,6 +347,7 @@
 		};
 		A950528022509EB200BFBC53 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0D9A5D3C1A0C12DAFB01E562 /* Pods-BaseTest.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
