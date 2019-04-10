@@ -61,6 +61,8 @@ public func resetSymbol(_ symbol: [UInt8],
         }
     }
     
+    if linkeditCmd == nil || dyldInfoCmd == nil { return }
+    
     let linkeditBase = UInt64(slide) + linkeditCmd.pointee.vmaddr - linkeditCmd.pointee.fileoff
     let lazyBindOffset = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
     let bindOffset = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)

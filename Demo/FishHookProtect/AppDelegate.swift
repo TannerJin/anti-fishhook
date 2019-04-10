@@ -8,6 +8,7 @@
 
 import UIKit
 import InsertDyld
+import MachO
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -43,4 +44,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-
