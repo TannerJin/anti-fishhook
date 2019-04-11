@@ -12,3 +12,11 @@ __AntiFishhook__ is AntiHook library for [`fishhook`][fishhook] at runtime.
   resetSymbol("NSLog")
   NSLog("Hello World")
 ```
+
+### Note
+
+ Run or test in your phone instend of simulator
+
+### Suggestion
+
+Use by dragging source file to your project instend of pod
