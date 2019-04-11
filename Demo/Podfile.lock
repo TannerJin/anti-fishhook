@@ -1,16 +1,16 @@
 PODS:
-  - antiFishhook (0.5.0)
+  - antiFishhook (0.6.0)
 
 DEPENDENCIES:
-  - antiFishhook (= 0.5.0)
+  - antiFishhook (= 0.6.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - antiFishhook
 
 SPEC CHECKSUMS:
-  antiFishhook: 2563cb0e2868fce64fa87f05cd3bbb0fac64db3c
+  antiFishhook: e42dbdc625c71f9a824c395981e9b88470d43e0b
 
-PODFILE CHECKSUM: 125714e3e81927cdd5995d5812e6d4d5b3be6994
+PODFILE CHECKSUM: c0ddb7197a820b964e23f589e56be45862fe7c32
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1
