@@ -1,6 +1,6 @@
 # AntiFishhook
 
-__AntiFishhook__ is AntiHook library for [`fishhook`][fishhook] at runtime.
+__AntiFishhook__ is an AntiHook library for [`fishhook`][fishhook] at runtime.
 
 [fishhook]: https://github.com/facebook/fishhook
 
@@ -15,7 +15,8 @@ __AntiFishhook__ is AntiHook library for [`fishhook`][fishhook] at runtime.
 
 ### Note
 
- Run or test in your phone instend of simulator
+ Run or test in your phone instend of simulator   
+ Not support arm64e architecture(Text hasn't stub_helper section and auth_stubs section as a replacement) 
 
 ### Suggestion
 
