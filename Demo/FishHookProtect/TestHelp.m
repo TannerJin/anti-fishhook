@@ -17,21 +17,29 @@
 }
 
 + (void *)getNewPrintMehod {
-    return newPrint;
+    return newPrintf;
 }
 
 + (void *)getNewDladdrMethod {
     return newDladdr;
 }
 
++ (void *)getNewDlopenMethod {
+    return newDlopen;
+}
+
 // new printf method
-void newPrint(const char * str, ...) {
-    NSLog(@"printf method has replaced with NSLog");
+void newPrintf(const char * str, ...) {
+    NSLog(@"printf method had been fishhooked");
 }
 
 // new dladdr method
 int newDladdr(void* imp, Dl_info* info) {
     return -999;
+}
+
+void * newDlopen(const char * path, int model) {
+    return nil;
 }
 
 @end

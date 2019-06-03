@@ -32,3 +32,9 @@ public func fishhookDladdr(newMethod: UnsafeMutableRawPointer) {
         }
     }
 }
+
+// fishhook dlopen
+public func fishhookDlopen(newMethod: UnsafeMutableRawPointer) {
+    var oldMethod: UnsafeMutableRawPointer?
+    replaceSymbol("dlopen", newMethod: newMethod, oldMethod: &oldMethod)
+}
