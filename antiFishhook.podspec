@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'antiFishhook'
-  s.version      = '0.7.0'
+  s.version      = '0.8.0'
   s.summary      = 'anti-fishhook'
   s.homepage     = 'https://github.com/TannerJin/anti-fishhook'
   s.license      = { :type => "MIT" }
@@ -10,4 +10,5 @@ Pod::Spec.new do |s|
   s.source_files = "Source/*.swift"
   s.framework = "Foundation"
   s.requires_arc = true
+  s.swift_version = "4.2"
 end
