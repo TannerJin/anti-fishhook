@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TestHelp : NSObject
 
-+ (void *)getNewNSLogMehod;
++ (void)printWithStr: (NSString *)str;
++ (void *)getNewPrintMehod;
 + (void *)getNewDladdrMethod;
 
 @end

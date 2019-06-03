@@ -10,10 +10,10 @@ import Foundation
 import MachO
 import antiFishhook
 
-// fishhook NSLog
-public func fishhookNSLog(newMethod: UnsafeMutableRawPointer) {
+// fishhook printf
+public func fishhookPrint(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
-    replaceSymbol("NSLog", newMethod: newMethod, oldMethod: &oldMethod)
+    replaceSymbol("printf", newMethod: newMethod, oldMethod: &oldMethod)
 }
 
 // fishhook dladdr

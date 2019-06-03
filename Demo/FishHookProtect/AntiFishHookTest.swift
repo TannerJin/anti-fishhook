@@ -11,8 +11,8 @@ import MachO
 import antiFishhook
 
 // protect
-public func protectNSLog() {
-    resetSymbol("NSLog")
+public func protectPrint() {
+    resetSymbol("printf")
 }
 
 // protect BaseTest Framework's dladdr
@@ -32,11 +32,11 @@ public func protectDladdr() {
 }
 
 
-public func verificationDyld() {
+public func verificationDladdr() {
     if let testImp = class_getMethodImplementation(BaseTest.self, #selector(BaseTest.baseTest)) {
         var info = Dl_info()
         if dladdr(UnsafeRawPointer(testImp), &info) == -999 {
-            print("dladdr --------- fishhook")
+            print("dladdr method had been fishhooked")
         } else if dladdr(UnsafeRawPointer(testImp), &info) == 1 {
             print("dladdr fname---------",  String(cString: info.dli_fname))
         }

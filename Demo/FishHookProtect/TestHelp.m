@@ -11,18 +11,22 @@
 
 @implementation TestHelp
 
-+ (void *)getNewNSLogMehod {
-    return newNSLog;
++ (void)printWithStr:(NSString *)str {
+    const char *str2 = [str UTF8String];
+    printf("%s", str2);
+}
+
++ (void *)getNewPrintMehod {
+    return newPrint;
 }
 
 + (void *)getNewDladdrMethod {
     return newDladdr;
 }
 
-// new NSlog method
-void newNSLog(NSString *format, ...) {    
-    printf("NSLog --------- fishhook");
-    printf("\n");
+// new printf method
+void newPrint(const char * str, ...) {
+    NSLog(@"printf method has replaced with NSLog");
 }
 
 // new dladdr method

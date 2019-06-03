@@ -16,6 +16,7 @@ private let __stub_helper_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8
 // __Linkedit
 private let __linkedit_seg_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) = (0x5f, 0x5f, 0x4c, 0x49, 0x4e, 0x4b, 0x45, 0x44, 0x49, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
+@inlinable
 public func resetSymbol(_ symbol: String)
 {
     guard let symbolBytes = symbol.data(using: String.Encoding.utf8)?.map({ $0 }) else { return }
@@ -26,6 +27,7 @@ public func resetSymbol(_ symbol: String)
     }
 }
 
+@inlinable
 public func resetSymbol(_ symbol: [UInt8],
                          image: UnsafePointer<mach_header>,
                          imageSlide slide: Int)

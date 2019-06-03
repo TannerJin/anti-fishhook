@@ -9,6 +9,7 @@
 import Foundation
 import MachO
 
+@inlinable
 public func replaceSymbol(_ symbol: String,
                           newMethod: UnsafeMutableRawPointer,
                           oldMethod: inout UnsafeMutableRawPointer?)
@@ -21,6 +22,7 @@ public func replaceSymbol(_ symbol: String,
     }
 }
 
+@inlinable
 public func replaceSymbol(_ symbol: [UInt8],
                           image: UnsafePointer<mach_header>,
                           imageSlide slide: Int,
@@ -30,6 +32,7 @@ public func replaceSymbol(_ symbol: [UInt8],
     rebindSymbolForImage(image, imageSlide: slide, symbolBytes: symbol, newMethod: newMethod, oldMethod: &oldMethod)
 }
 
+@inlinable
 public func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
                                  imageSlide slide: Int,
                                  symbolBytes: [UInt8],

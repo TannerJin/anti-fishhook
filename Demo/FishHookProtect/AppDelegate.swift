@@ -17,28 +17,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        print("origation: ")
-        // origation
-        NSLog("origation: Hello, World")
-        verificationDyld()
+        // hook printf method
+        fishhookPrint(newMethod: TestHelp.getNewPrintMehod())
+        TestHelp.print(withStr: "printf Tanner") // print result
         
-        // fishhook
-        fishhookNSLog(newMethod: TestHelp.getNewNSLogMehod())
+        protectPrint()
+        TestHelp.print(withStr: "printf Jin\n") // print result
+        
+        
+        // hook dladdr method
         fishhookDladdr(newMethod: TestHelp.getNewDladdrMethod())
-        
-        print("\nverifiacate fishhook: ")
-        // verifiacate fishhook
-        NSLog("verifiacate fishhook: Hello, World")
-        verificationDyld()
-        
-        // fishhook protect
-        protectNSLog()
+        verificationDladdr() // print reslut
+
         protectDladdr()
-        
-        print("\nverifiacate anti-fishhook : ")
-        // verifiacate fishhook protect
-        NSLog("verifiacate anti-fishhook: Hello, World")
-        verificationDyld()
+        verificationDladdr() // print result
         
         return true
     }
