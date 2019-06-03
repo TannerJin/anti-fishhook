@@ -27,7 +27,6 @@ public func resetSymbol(_ symbol: String)
     }
 }
 
-@inlinable
 public func resetSymbol(_ symbol: [UInt8],
                          image: UnsafePointer<mach_header>,
                          imageSlide slide: Int)
