@@ -118,6 +118,7 @@ public func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
     }
 }
 
+@inlinable
 public func rebindSymbolPointerWithSection(_ section: UnsafeMutablePointer<section_64>,
                                            symtab: UnsafeMutablePointer<nlist_64>,
                                            strtab: UnsafeMutablePointer<UInt8>,

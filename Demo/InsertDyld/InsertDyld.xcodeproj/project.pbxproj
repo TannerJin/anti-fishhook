@@ -317,6 +317,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6249167321D0F899E89EA65 /* Pods-InsertDyld.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -338,7 +339,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64e arm64";
 			};
 			name = Debug;
 		};
@@ -346,6 +347,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0729E6988353829E18A5ADBE /* Pods-InsertDyld.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -366,7 +368,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64e arm64";
 			};
 			name = Release;
 		};

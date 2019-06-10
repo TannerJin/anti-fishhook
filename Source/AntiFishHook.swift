@@ -27,6 +27,7 @@ public func resetSymbol(_ symbol: String)
     }
 }
 
+@inlinable
 public func resetSymbol(_ symbol: [UInt8],
                          image: UnsafePointer<mach_header>,
                          imageSlide slide: Int)
@@ -78,7 +79,7 @@ public func resetSymbol(_ symbol: [UInt8],
         }
         
         var index: Int?
-        var newSymbol = [0x5f] + symbol
+        let newSymbol = [0x5f] + symbol    // _symbol(Name Mangling), so not support Swift Framework
         for i in 0..<arrBytes.count {
             if i < (arrBytes.count - newSymbol.count), arrBytes[i] == UInt8(0x5f) {
                 var contains = true
@@ -103,7 +104,8 @@ public func resetSymbol(_ symbol: [UInt8],
     resetSymbol(bindOffset: bindOffset, size: dyldInfoCmd.pointee.bind_size)
 }
 
-private func resetSymbolByVoid(symbol: [UInt8],
+@inlinable
+public func resetSymbolByVoid(symbol: [UInt8],
                                image: UnsafePointer<mach_header>,
                                imageSlide slide: Int,
                                offset: Int)

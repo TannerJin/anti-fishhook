@@ -388,6 +388,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 81F286D4E663FA4F76A459FB /* Pods-FishHookProtect.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -406,7 +407,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Debug;
 		};
@@ -414,6 +415,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D2A3EF08710C56A9E5DD457F /* Pods-FishHookProtect.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -431,7 +433,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "FishHookProtect/FishHookProtect-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 arm64e";
 			};
 			name = Release;
 		};
