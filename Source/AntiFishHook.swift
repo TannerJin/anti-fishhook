@@ -79,7 +79,7 @@ public func resetSymbol(_ symbol: [UInt8],
         }
         
         var index: Int?
-        let newSymbol = [0x5f] + symbol    // _symbol(Name Mangling), so not support Swift Framework
+        let newSymbol = [0x5f] + symbol    // _symbol(Name Mangling), support Swift(notice Swift Name Mangling)
         for i in 0..<arrBytes.count {
             if i < (arrBytes.count - newSymbol.count), arrBytes[i] == UInt8(0x5f) {
                 var contains = true
