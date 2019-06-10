@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void *)getNewPrintMehod;
 + (void *)getNewDladdrMethod;
 + (void *)getNewDlopenMethod;
++ (void *)getNewSwiftFoundationNSLog;
 
 @end
 

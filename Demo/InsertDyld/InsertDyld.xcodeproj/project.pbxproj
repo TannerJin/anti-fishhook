@@ -382,7 +382,7 @@
 				A95052B22251FE9000BFBC53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		A95052B32251FE9000BFBC53 /* Build configuration list for PBXNativeTarget "InsertDyld" */ = {
 			isa = XCConfigurationList;
@@ -391,7 +391,7 @@
 				A95052B52251FE9000BFBC53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

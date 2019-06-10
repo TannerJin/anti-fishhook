@@ -38,3 +38,9 @@ public func fishhookDlopen(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
     replaceSymbol("dlopen", newMethod: newMethod, oldMethod: &oldMethod)
 }
+
+// fishhook Swift.Foudation.NSLog
+public func fishhookSwiftFoudationNSLog(newMethod: UnsafeMutableRawPointer) {
+    var oldMethod: UnsafeMutableRawPointer?
+    replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: newMethod, oldMethod: &oldMethod)
+}

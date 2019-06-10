@@ -28,6 +28,10 @@
     return newDlopen;
 }
 
++ (void *)getNewSwiftFoundationNSLog {
+    return newSwiftFoundationNSLog;
+}
+
 // new printf method
 void newPrintf(const char * str, ...) {
     NSLog(@"printf method had been fishhooked");
@@ -38,8 +42,14 @@ int newDladdr(void* imp, Dl_info* info) {
     return -999;
 }
 
+// new dlopen method
 void * newDlopen(const char * path, int model) {
     return nil;
+}
+
+// new Foudation.NSLog method
+void newSwiftFoundationNSLog(const char * str, ...) {
+    NSLog(@"SwiftFoundation.NSLog method had been fishhooked");
 }
 
 @end

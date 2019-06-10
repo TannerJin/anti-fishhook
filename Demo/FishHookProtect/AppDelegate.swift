@@ -9,6 +9,7 @@
 import UIKit
 import InsertDyld
 import MachO
+import antiFishhook
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,31 +18,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // printf method
+        // MARK: -  printf method
         print("======> printf_test:")
         fishhookPrint(newMethod: TestHelp.getNewPrintMehod())
-        TestHelp.print(withStr: "Hello World") // print result
+        TestHelp.print(withStr: "Hello World")
+
+        resetSymbol("printf")
+        TestHelp.print(withStr: "Hello World\n") //
+
         
-        protectPrint()
-        TestHelp.print(withStr: "Tanner Jin\n") // print result
-        
-        
-        // dladdr method
+        // MARK: - dladdr method
         print("\n======> dladdr_test:")
         fishhookDladdr(newMethod: TestHelp.getNewDladdrMethod())
         verificationDladdr() // print reslut
 
-        protectDladdr()
-        verificationDladdr() // print result
+        func resetDladdrSymbol() {
+            for i in 0..<_dyld_image_count() {
+                if let name = _dyld_get_image_name(i) {
+                    let imageName = String(cString: name)
+                    if imageName.contains("FishHookProtect"),
+                        let symbol = "dladdr".data(using: String.Encoding.utf8)?.map({$0}),
+                        let image = _dyld_get_image_header(i)
+                    {
+                        resetSymbol(symbol, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
+                        break
+                    }
+                }
+            }
+        }
+        resetDladdrSymbol()
+        verificationDladdr()
+
         
-        // dlopen method
-        print("\n======> dlopen_test:")
-        // during loading dyld, will call dlopen method. so wait dyld finish load(not thread safe),
+        // MARK: - Swift Foudation.NSLog method
+        print("\n======> Swift_Foudation.NSLog test:")
+        fishhookSwiftFoudationNSLog(newMethod: TestHelp.getNewSwiftFoundationNSLog())
+        NSLog("Swift symbol test")
+        resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF") // original: _$s10Foundation5NSLogyySS_s7CVarArg_pdtF
+        NSLog("Swift symbol test")
+        
+        
+        // MARK: - dlopen method
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            // during loading dyld, will call dlopen method. so wait dyld finish load(not thread safe),
+            print("\n======> dlopen_test:")
             fishhookDlopen(newMethod: TestHelp.getNewDlopenMethod())
             verificationDlopen()
             
-            protectDlopen()
+            resetSymbol("dlopen")
             verificationDlopen()
         }
         
@@ -50,7 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-public func verificationDlopen() {
+// MARK: - Verification Helper
+
+private func verificationDlopen() {
     let handle = dlopen("/usr/lib/libc.dylib", RTLD_NOW)
 
     if handle == nil {
@@ -63,7 +89,13 @@ public func verificationDlopen() {
     }
 }
 
-public func verificationDladdr() {
+private func verificationDladdr() {
+    class BaseTest {
+        @objc func baseTest() {
+            print("baseTest")
+        }
+    }
+    
     if let testImp = class_getMethodImplementation(BaseTest.self, #selector(BaseTest.baseTest)) {
         var info = Dl_info()
         if dladdr(UnsafeRawPointer(testImp), &info) == -999 {
@@ -71,11 +103,5 @@ public func verificationDladdr() {
         } else if dladdr(UnsafeRawPointer(testImp), &info) == 1 {
             print("dladdr fname---------",  String(cString: info.dli_fname))
         }
-    }
-}
-
-class BaseTest {
-    @objc func baseTest() {
-        print("baseTest")
     }
 }
