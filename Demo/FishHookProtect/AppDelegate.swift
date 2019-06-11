@@ -101,7 +101,7 @@ private func verificationDladdr() {
         if dladdr(UnsafeRawPointer(testImp), &info) == -999 {
             print("dladdr method had been fishhooked")
         } else if dladdr(UnsafeRawPointer(testImp), &info) == 1 {
-            print("dladdr fname---------",  String(cString: info.dli_fname))
+            print("dladdr method path: ",  String(cString: info.dli_fname))
         }
     }
 }
