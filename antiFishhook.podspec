@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'antiFishhook'
-  s.version      = '0.8.1'
+  s.version      = '0.9.0'
   s.summary      = 'anti-fishhook'
   s.homepage     = 'https://github.com/TannerJin/anti-fishhook'
   s.license      = { :type => "MIT" }

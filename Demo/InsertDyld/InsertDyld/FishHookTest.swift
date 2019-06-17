@@ -11,7 +11,7 @@ import MachO
 import antiFishhook
 
 // fishhook printf
-public func fishhookPrint(newMethod: UnsafeMutableRawPointer) {
+public func fishhookPrintf(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
     replaceSymbol("printf", newMethod: newMethod, oldMethod: &oldMethod)
 }
@@ -40,7 +40,7 @@ public func fishhookDlopen(newMethod: UnsafeMutableRawPointer) {
 }
 
 // fishhook Swift.Foudation.NSLog
-public func fishhookSwiftFoudationNSLog(newMethod: UnsafeMutableRawPointer) {
+public func fishhookSwiftFoudationNSLog(_ nslogSymbol: String, newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
-    replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: newMethod, oldMethod: &oldMethod)
+    replaceSymbol(nslogSymbol, newMethod: newMethod, oldMethod: &oldMethod)
 }

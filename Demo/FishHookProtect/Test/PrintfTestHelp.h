@@ -10,14 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TestHelp : NSObject
+@interface PrintfTestHelp : NSObject
 
-+ (void)printWithStr: (NSString *)str;
-
-+ (void *)getNewPrintMehod;
-+ (void *)getNewDladdrMethod;
-+ (void *)getNewDlopenMethod;
-+ (void *)getNewSwiftFoundationNSLog;
++ (void)printfWithStr: (NSString *)str;
 
 @end
 

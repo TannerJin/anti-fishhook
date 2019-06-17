@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		7BEE244001CDC7E9933F4405 /* Pods_FishHookProtect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE04D5A4349228663001A630 /* Pods_FishHookProtect.framework */; };
+		A928728822B7E715003FFD83 /* Dladdr.swift in Sources */ = {isa = PBXBuildFile; fileRef = A928728722B7E715003FFD83 /* Dladdr.swift */; };
+		A928728A22B7E7A4003FFD83 /* Printf.swift in Sources */ = {isa = PBXBuildFile; fileRef = A928728922B7E7A4003FFD83 /* Printf.swift */; };
+		A928728C22B7E840003FFD83 /* NSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A928728B22B7E840003FFD83 /* NSLog.swift */; };
+		A928728E22B7EA5C003FFD83 /* Dlopen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A928728D22B7EA5C003FFD83 /* Dlopen.swift */; };
 		A9450EDE22522C7400658841 /* InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9450EDD22522C7400658841 /* InsertDyld.framework */; };
 		A9450EDF22522C7400658841 /* InsertDyld.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9450EDD22522C7400658841 /* InsertDyld.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A95051E02248B6AE00BFBC53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95051DF2248B6AE00BFBC53 /* AppDelegate.swift */; };
@@ -15,7 +19,7 @@
 		A95051E52248B6AE00BFBC53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95051E32248B6AE00BFBC53 /* Main.storyboard */; };
 		A95051E72248B6B000BFBC53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A95051E62248B6B000BFBC53 /* Assets.xcassets */; };
 		A95051EA2248B6B000BFBC53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95051E82248B6B000BFBC53 /* LaunchScreen.storyboard */; };
-		A95051F42248B71700BFBC53 /* TestHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = A95051F32248B71700BFBC53 /* TestHelp.m */; };
+		A95051F42248B71700BFBC53 /* PrintfTestHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = A95051F32248B71700BFBC53 /* PrintfTestHelp.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +38,10 @@
 
 /* Begin PBXFileReference section */
 		81F286D4E663FA4F76A459FB /* Pods-FishHookProtect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishHookProtect.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect.debug.xcconfig"; sourceTree = "<group>"; };
+		A928728722B7E715003FFD83 /* Dladdr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dladdr.swift; sourceTree = "<group>"; };
+		A928728922B7E7A4003FFD83 /* Printf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Printf.swift; sourceTree = "<group>"; };
+		A928728B22B7E840003FFD83 /* NSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLog.swift; sourceTree = "<group>"; };
+		A928728D22B7EA5C003FFD83 /* Dlopen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dlopen.swift; sourceTree = "<group>"; };
 		A9450EDD22522C7400658841 /* InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95051DC2248B6AE00BFBC53 /* FishHookProtect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishHookProtect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95051DF2248B6AE00BFBC53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -43,8 +51,8 @@
 		A95051E92248B6B000BFBC53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A95051EB2248B6B000BFBC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A95051F12248B71600BFBC53 /* FishHookProtect-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FishHookProtect-Bridging-Header.h"; sourceTree = "<group>"; };
-		A95051F22248B71700BFBC53 /* TestHelp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestHelp.h; sourceTree = "<group>"; };
-		A95051F32248B71700BFBC53 /* TestHelp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestHelp.m; sourceTree = "<group>"; };
+		A95051F22248B71700BFBC53 /* PrintfTestHelp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrintfTestHelp.h; sourceTree = "<group>"; };
+		A95051F32248B71700BFBC53 /* PrintfTestHelp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrintfTestHelp.m; sourceTree = "<group>"; };
 		D2A3EF08710C56A9E5DD457F /* Pods-FishHookProtect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishHookProtect.release.xcconfig"; path = "Pods/Target Support Files/Pods-FishHookProtect/Pods-FishHookProtect.release.xcconfig"; sourceTree = "<group>"; };
 		EE04D5A4349228663001A630 /* Pods_FishHookProtect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FishHookProtect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -70,6 +78,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A928728622B7E709003FFD83 /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				A95051F22248B71700BFBC53 /* PrintfTestHelp.h */,
+				A95051F32248B71700BFBC53 /* PrintfTestHelp.m */,
+				A928728922B7E7A4003FFD83 /* Printf.swift */,
+				A928728722B7E715003FFD83 /* Dladdr.swift */,
+				A928728B22B7E840003FFD83 /* NSLog.swift */,
+				A928728D22B7EA5C003FFD83 /* Dlopen.swift */,
+			);
+			path = Test;
+			sourceTree = "<group>";
+		};
 		A95051D32248B6AE00BFBC53 = {
 			isa = PBXGroup;
 			children = (
@@ -92,14 +113,13 @@
 		A95051DE2248B6AE00BFBC53 /* FishHookProtect */ = {
 			isa = PBXGroup;
 			children = (
+				A928728622B7E709003FFD83 /* Test */,
 				A95051DF2248B6AE00BFBC53 /* AppDelegate.swift */,
 				A95051E12248B6AE00BFBC53 /* ViewController.swift */,
 				A95051E32248B6AE00BFBC53 /* Main.storyboard */,
 				A95051E62248B6B000BFBC53 /* Assets.xcassets */,
 				A95051E82248B6B000BFBC53 /* LaunchScreen.storyboard */,
 				A95051EB2248B6B000BFBC53 /* Info.plist */,
-				A95051F22248B71700BFBC53 /* TestHelp.h */,
-				A95051F32248B71700BFBC53 /* TestHelp.m */,
 				A95051F12248B71600BFBC53 /* FishHookProtect-Bridging-Header.h */,
 			);
 			path = FishHookProtect;
@@ -231,9 +251,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A95051F42248B71700BFBC53 /* TestHelp.m in Sources */,
+				A95051F42248B71700BFBC53 /* PrintfTestHelp.m in Sources */,
+				A928728E22B7EA5C003FFD83 /* Dlopen.swift in Sources */,
 				A95051E22248B6AE00BFBC53 /* ViewController.swift in Sources */,
+				A928728822B7E715003FFD83 /* Dladdr.swift in Sources */,
+				A928728A22B7E7A4003FFD83 /* Printf.swift in Sources */,
 				A95051E02248B6AE00BFBC53 /* AppDelegate.swift in Sources */,
+				A928728C22B7E840003FFD83 /* NSLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
