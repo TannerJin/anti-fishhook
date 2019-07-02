@@ -1,26 +1,24 @@
 //
 //  AppDelegate.swift
-//  FishHookProtect
+//  AntiFishHookDemo
 //
-//  Created by jintao on 2019/3/25.
+//  Created by jintao on 2019/7/3.
 //  Copyright © 2019 jintao. All rights reserved.
 //
 
 import UIKit
-import InsertDyld
-import MachO
-import antiFishhook
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // MARK: -  printf method
         testPrintf()
-
+        
         // MARK: - dladdr method
         testDladdr()
         
@@ -34,3 +32,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
+

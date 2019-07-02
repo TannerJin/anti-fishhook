@@ -1,8 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
-workspace 'FishHookProtect.xcworkspace'
+workspace 'AntiFishHookDemo.xcworkspace'
 
-target 'FishHookProtect' do
+target 'AntiFishHookDemo' do
   use_frameworks!
   pod 'antiFishhook', :path => '../'
 end

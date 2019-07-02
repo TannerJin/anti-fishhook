@@ -10,6 +10,7 @@
 		9E19AE381E8DFCFC2D9B1919 /* Pods_InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287D178ED5709A309905ED85 /* Pods_InsertDyld.framework */; };
 		A95052B02251FE9000BFBC53 /* InsertDyld.h in Headers */ = {isa = PBXBuildFile; fileRef = A95052AE2251FE9000BFBC53 /* InsertDyld.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A95052B72251FEBE00BFBC53 /* FishHookTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95052B62251FEBE00BFBC53 /* FishHookTest.swift */; };
+		A95B34E522CBBA880078B3D4 /* antiFishhook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95B34E422CBBA880078B3D4 /* antiFishhook.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		A95052AE2251FE9000BFBC53 /* InsertDyld.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InsertDyld.h; sourceTree = "<group>"; };
 		A95052AF2251FE9000BFBC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A95052B62251FEBE00BFBC53 /* FishHookTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishHookTest.swift; sourceTree = "<group>"; };
+		A95B34E422CBBA880078B3D4 /* antiFishhook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = antiFishhook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6249167321D0F899E89EA65 /* Pods-InsertDyld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InsertDyld.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-InsertDyld/Pods-InsertDyld.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -27,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A95B34E522CBBA880078B3D4 /* antiFishhook.framework in Frameworks */,
 				9E19AE381E8DFCFC2D9B1919 /* Pods_InsertDyld.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,6 +77,7 @@
 		AC4EFFF0F09E5DC5F75798B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A95B34E422CBBA880078B3D4 /* antiFishhook.framework */,
 				287D178ED5709A309905ED85 /* Pods_InsertDyld.framework */,
 			);
 			name = Frameworks;
@@ -339,7 +343,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64e arm64";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -368,7 +372,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64e arm64";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};

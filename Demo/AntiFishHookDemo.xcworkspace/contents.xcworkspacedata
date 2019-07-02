@@ -5,7 +5,7 @@
       location = "group:InsertDyld/InsertDyld.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:FishHookProtect.xcodeproj">
+      location = "group:AntiFishHookDemo.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

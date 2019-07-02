@@ -16,13 +16,13 @@ public func fishhookPrintf(newMethod: UnsafeMutableRawPointer) {
     replaceSymbol("printf", newMethod: newMethod, oldMethod: &oldMethod)
 }
 
-// fishhook dladdr
+// fishhook AntiFishHookDemo' target symbol dladdr
 public func fishhookDladdr(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
     for i in 0..<_dyld_image_count() {
         if let name = _dyld_get_image_name(i) {
             let imageName = String(cString: name)
-            if imageName.contains("FishHookProtect"),
+            if imageName.contains("AntiFishHookDemo"),
                 let symbol = "dladdr".data(using: String.Encoding.utf8)?.map({$0}),
                 let image = _dyld_get_image_header(i)
             {

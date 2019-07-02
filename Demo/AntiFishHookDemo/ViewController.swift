@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  FishHookProtect
+//  AntiFishHookDemo
 //
-//  Created by jintao on 2019/3/25.
+//  Created by jintao on 2019/7/3.
 //  Copyright © 2019 jintao. All rights reserved.
 //
 
@@ -12,8 +12,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        // Do any additional setup after loading the view.
     }
+
 
 }
 
