@@ -20,6 +20,7 @@ public let __linkedit_seg_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8
 public func resetSymbol(_ symbol: String)
 {
     guard let symbolBytes = symbol.data(using: String.Encoding.utf8)?.map({ $0 }) else { return }
+    
     for i in 0..<_dyld_image_count() {
         if let image = _dyld_get_image_header(i) {
             resetSymbol(symbolBytes, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))

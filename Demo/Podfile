@@ -4,11 +4,11 @@ workspace 'FishHookProtect.xcworkspace'
 
 target 'FishHookProtect' do
   use_frameworks!
-  pod 'antiFishhook', '0.8.0'
+  pod 'antiFishhook', :path => '../'
 end
 
 target 'InsertDyld' do
     use_frameworks! 
-    pod 'antiFishhook', '0.8.0'
+    pod 'antiFishhook', :path => '../'
     project 'InsertDyld/InsertDyld.xcodeproj'
 end
