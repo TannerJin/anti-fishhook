@@ -10,13 +10,13 @@ import Foundation
 import MachO
 import antiFishhook
 
-// fishhook printf
+// fishhook all image's printf
 public func fishhookPrintf(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
     replaceSymbol("printf", newMethod: newMethod, oldMethod: &oldMethod)
 }
 
-// fishhook AntiFishHookDemo' target symbol dladdr
+// fishhook AntiFishHookDemo's target symbol dladdr
 public func fishhookDladdr(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
     for i in 0..<_dyld_image_count() {
@@ -33,13 +33,13 @@ public func fishhookDladdr(newMethod: UnsafeMutableRawPointer) {
     }
 }
 
-// fishhook dlopen
+// fishhook all image's dlopen
 public func fishhookDlopen(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
     replaceSymbol("dlopen", newMethod: newMethod, oldMethod: &oldMethod)
 }
 
-// fishhook Swift.Foudation.NSLog
+// fishhook all image's Swift.Foudation.NSLog
 public func fishhookSwiftFoudationNSLog(_ nslogSymbol: String, newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
     replaceSymbol(nslogSymbol, newMethod: newMethod, oldMethod: &oldMethod)

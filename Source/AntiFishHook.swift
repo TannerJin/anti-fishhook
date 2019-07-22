@@ -67,8 +67,8 @@ public func resetSymbol(_ symbol: [UInt8],
     if linkeditCmd == nil || dyldInfoCmd == nil { return }
     
     let linkeditBase = UInt64(slide) + linkeditCmd.pointee.vmaddr - linkeditCmd.pointee.fileoff
-    let lazyBindOffset_vm_addr = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
-    let bindOffset_vm_addr = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)
+    let lazyBindOffsetInfo_vm_addr = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
+    let bindOffsetInfo_vm_addr = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)
     
     func findSymbolAt(section_vm_addr: UInt64, section_size: UInt32) {
         guard let section_pointer = UnsafeMutablePointer<UInt8>(bitPattern: Int(section_vm_addr)) else { return }
@@ -80,12 +80,12 @@ public func resetSymbol(_ symbol: [UInt8],
         }
         
         var index: Int?
-        let newSymbol = [0x5f] + symbol    // _symbol(Name Mangling), support Swift(notice Swift Name Mangling)
+        let _symbol = [0x5f] + symbol    // _symbol(Name Mangling), support Swift(notice Swift Name Mangling)
         for i in 0..<section_bytes.count {
-            if i < (section_bytes.count - newSymbol.count), section_bytes[i] == UInt8(0x5f) {
+            if i < (section_bytes.count - _symbol.count), section_bytes[i] == UInt8(0x5f) {
                 var contains = true
                 for j in 0..<symbol.count {
-                    if section_bytes[i+j] != newSymbol[j] {
+                    if section_bytes[i+j] != _symbol[j] {
                         contains = false
                     }
                 }
@@ -101,8 +101,8 @@ public func resetSymbol(_ symbol: [UInt8],
         }
     }
     
-    findSymbolAt(section_vm_addr: lazyBindOffset_vm_addr, section_size: dyldInfoCmd.pointee.lazy_bind_size)
-    findSymbolAt(section_vm_addr: bindOffset_vm_addr, section_size: dyldInfoCmd.pointee.bind_size)
+    findSymbolAt(section_vm_addr: lazyBindOffsetInfo_vm_addr, section_size: dyldInfoCmd.pointee.lazy_bind_size)
+    findSymbolAt(section_vm_addr: bindOffsetInfo_vm_addr, section_size: dyldInfoCmd.pointee.bind_size)
 }
 
 @inline(__always)
@@ -162,6 +162,7 @@ private func findCodeVMAddr(symbol: [UInt8],
     for i in 0..<stub_helper_section.pointee.size/4 {
         if stubHelperVMAddr.advanced(by: Int(i)).pointee == symbol_data_offset {
             codeOffset = Int(i)
+            break
         }
     }
     if codeOffset == nil { return }
