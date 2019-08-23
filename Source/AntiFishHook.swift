@@ -73,31 +73,25 @@ public func resetSymbol(_ symbol: [UInt8],
     func findSymbolAt(section_vm_addr: UInt64, section_size: UInt32) {
         guard let section_pointer = UnsafeMutablePointer<UInt8>(bitPattern: Int(section_vm_addr)) else { return }
         
-        var section_bytes = [UInt8]()
-        for i in 0..<section_size {
-            let byte = section_pointer.advanced(by: Int(i)).pointee
-            section_bytes.append(byte)
-        }
-        
         var index: Int?
         let _symbol = [0x5f] + symbol    // _symbol(Name Mangling), support Swift(notice Swift Name Mangling)
-        for i in 0..<section_bytes.count {
-            if i < (section_bytes.count - _symbol.count), section_bytes[i] == UInt8(0x5f) {
-                var contains = true
-                for j in 0..<symbol.count {
-                    if section_bytes[i+j] != _symbol[j] {
-                        contains = false
-                    }
-                }
-                if contains {
-                    index = i
-                    break
+        let size = Int(section_size)
+        for i in 0..<size {
+            var contains = true
+     Label: for j in 0..<symbol.count {
+                if section_pointer[i+j] != _symbol[j] {
+                    contains = false
+                    break Label
                 }
             }
+            if contains {
+                index = i
+                break
+            }
         }
-        
-        if index != nil {
-            findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, symbol_data_offset: index! - 5)
+
+        if let offset = index, offset >= 5, offset + _symbol.count <= size {
+            findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, symbol_data_offset: offset - 5)
         }
     }
     
