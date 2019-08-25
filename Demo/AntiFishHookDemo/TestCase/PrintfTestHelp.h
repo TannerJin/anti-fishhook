@@ -12,7 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PrintfTestHelp : NSObject
 
-+ (void)printfWithStr: (NSString *)str;
++ (void)printf: (NSString *)str;
+
++ (void)antiFishhook;
 
 @end
 

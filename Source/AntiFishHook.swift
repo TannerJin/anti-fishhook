@@ -17,6 +17,7 @@ fileprivate let __stub_helper_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, U
 fileprivate let __linkedit_seg_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) = (0x5f, 0x5f, 0x4c, 0x49, 0x4e, 0x4b, 0x45, 0x44, 0x49, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
 @inline(__always)
+@_cdecl("resetSymbol")  // support Swift, C, Objc...
 public func resetSymbol(_ symbol: String)
 {
     guard let symbolBytes = symbol.data(using: String.Encoding.utf8)?.map({ $0 }) else { return }

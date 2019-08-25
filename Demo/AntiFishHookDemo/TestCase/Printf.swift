@@ -22,12 +22,13 @@ func testPrintf() {
     let printf: NewPrintfMethod = newPrinf
     
     fishhookPrintf(newMethod: unsafeBitCast(printf, to: UnsafeMutableRawPointer.self))
-    PrintfTestHelp.printf(withStr: "Hello World")
+    PrintfTestHelp.printf("Hello World")
     
     print("begin time=>: ", mach_absolute_time())
-    resetSymbol("printf")
+    PrintfTestHelp.antiFishhook()
     print("end time=>:", mach_absolute_time())
-    PrintfTestHelp.printf(withStr: "Hello World🚀🚀🚀\n")
+    
+    PrintfTestHelp.printf("Hello World🚀🚀🚀\n")
 }
 
 

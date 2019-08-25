@@ -7,13 +7,17 @@
 //
 
 #import "PrintfTestHelp.h"
-#include "dlfcn.h"
+#include "antiFishhook-Swift.h"
 
 @implementation PrintfTestHelp
 
-+ (void)printfWithStr:(NSString *)str {
++ (void)printf:(NSString *)str {
     const char *str2 = [str UTF8String];
     printf("%s", str2);
+}
+
++ (void)antiFishhook {
+    resetSymbol(@"printf");
 }
 
 @end

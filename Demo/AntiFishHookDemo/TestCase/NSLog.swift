@@ -40,7 +40,7 @@ public func swift_demangle(_ mangledName: String) -> String? {
     return nil
 }
 
-// Swift/Swift libraries/SwiftDemangling/Header Files/Demangle.h
+// swift_demangle: Swift/Swift libraries/SwiftDemangling/Header Files/Demangle.h
 @_silgen_name("swift_demangle")
 private func get_swift_demangle(mangledName: UnsafePointer<CChar>?,
                                 mangledNameLength: UInt,

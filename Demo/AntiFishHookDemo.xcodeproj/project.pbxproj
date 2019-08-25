@@ -120,8 +120,8 @@
 				A95B351222CBBBC30078B3D4 /* PrintfTestHelp.m */,
 				A95B350C22CBBBB40078B3D4 /* Printf.swift */,
 				A95B350B22CBBBB40078B3D4 /* Dladdr.swift */,
-				A95B350922CBBBB40078B3D4 /* Dlopen.swift */,
 				A95B350A22CBBBB40078B3D4 /* NSLog.swift */,
+				A95B350922CBBBB40078B3D4 /* Dlopen.swift */,
 			);
 			path = TestCase;
 			sourceTree = "<group>";

@@ -9,7 +9,7 @@
 import Foundation
 import MachO
 
-@inline(__always)
+@inline(__always)  // just for Swift
 public func replaceSymbol(_ symbol: String,
                           newMethod: UnsafeMutableRawPointer,
                           oldMethod: inout UnsafeMutableRawPointer?)
