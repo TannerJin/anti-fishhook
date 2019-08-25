@@ -7,35 +7,50 @@ __AntiFishhook__ is an AntiHook library for [`fishhook`][fishhook] at runtime.
 
 ## Usage
 
-### fishhook
+### antiFishhook(Swift)
 
 ```swift
-typealias NewSwiftNSLog = @convention(thin) (_ format: String, _ args: CVarArg...) -> Void
+import antiFishhook
 
-func newNSLog(_ format: String, _ args: CVarArg...) {
+resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF")  // Swift's Foudation.NSLog
+resetSymbol(@"printf")                                  // printf
+  
+NSLog("Hello AntiFishHook")
+// print Hello AntiFishHook
+
+```
+
+### antiFishhook(C/Objc)
+
+```Objective-C
+#include "antiFishhook-Swift.h"
+
++ (void)antiFishhook {
+    resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF");  // Swift's Foudation.NSLog
+    resetSymbol(@"printf");                                 // printf
+}
+```
+
+### fishhook(just for Swift)
+
+```swift
+typealias MyNSLog = @convention(thin) (_ format: String, _ args: CVarArg...) -> Void
+
+func my_NSLog(_ format: String, _ args: CVarArg...) {
     print("Hello fishHook")
 }
 
-let _nslog: NewSwiftNSLog  = newNSLog
-let _nslog_pointer = unsafeBitCast(_nslog, to: UnsafeMutableRawPointer.self)
-var old_nslog_pointer: UnsafeMutableRawPointer?
+let my_nslog: MyNSLog  = my_NSLog
+let my_nslog_pointer = unsafeBitCast(my_nslog, to: UnsafeMutableRawPointer.self)
+var orig_nslog_pointer: UnsafeMutableRawPointer?
 
-replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: _nslog_pointer, oldMethod: &old_nslog_pointer)
+replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: my_nslog_pointer, oldMethod: &orig_nslog_pointer)
 
 NSLog("Hello World")
 // print Hello fishHook
 
 ```
 
-### antiFishhook
-
-```swift
-resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF")  // Foudation.NSLog
-  
-NSLog("Hello AntiFishHook")
-// print Hello AntiFishHook
-
-```
 
 ### Note
 
