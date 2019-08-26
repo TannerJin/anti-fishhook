@@ -79,7 +79,7 @@ public func resetSymbol(_ symbol: [UInt8],
         let size = Int(section_size)
         for i in 0..<size {
             var contains = true
-     Label: for j in 0..<symbol.count {
+     Label: for j in 0..<_symbol.count {
                 if section_pointer[i+j] != _symbol[j] {
                     contains = false
                     break Label
