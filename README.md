@@ -13,7 +13,7 @@ __AntiFishhook__ is an AntiHook library for [`fishhook`][fishhook] at runtime.
 import antiFishhook
 
 resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF")  // Swift's Foudation.NSLog
-resetSymbol(@"printf")                                  // printf
+resetSymbol("printf")                                  // printf
   
 NSLog("Hello AntiFishHook")
 // print Hello AntiFishHook
@@ -26,7 +26,7 @@ NSLog("Hello AntiFishHook")
 #include "antiFishhook-Swift.h"
 
 + (void)antiFishhook {
-    resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF");  // Swift's Foudation.NSLog
+    resetSymbol(@"$s10Foundation5NSLogyySS_s7CVarArg_pdtF");  // Swift's Foudation.NSLog
     resetSymbol(@"printf");                                 // printf
 }
 ```
