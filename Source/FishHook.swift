@@ -39,8 +39,7 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
                                  newMethod: UnsafeMutableRawPointer,
                                  oldMethod: inout UnsafeMutableRawPointer?)
 {
-    // __Linkedit
-    // segment
+    // __Linkedit seg cmd
     let linkeditName = SEG_LINKEDIT.data(using: String.Encoding.utf8)!.map({ $0 })
     
     var linkeditCmd: UnsafeMutablePointer<segment_command_64>!
@@ -48,11 +47,11 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
     var dynamicSymtabCmd: UnsafeMutablePointer<dysymtab_command>!
     
     var curSegCmd: UnsafeMutablePointer<segment_command_64>!
-    var cur = OpaquePointer(UnsafeRawPointer(image).advanced(by: MemoryLayout<mach_header_64>.size))
+    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
     
     for _ in 0..<image.pointee.ncmds {
-        curSegCmd = UnsafeMutablePointer<segment_command_64>(cur)
-        cur = OpaquePointer(UnsafeRawPointer(cur).advanced(by: Int(curSegCmd.pointee.cmdsize)))
+        curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
+        cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
         
         if curSegCmd.pointee.cmd == LC_SEGMENT_64 {
             if UInt8(curSegCmd.pointee.segname.0) == linkeditName[0],
@@ -80,38 +79,39 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
     }
     
     let linkedBase = slide + Int(linkeditCmd.pointee.vmaddr) - Int(linkeditCmd.pointee.fileoff)
-    let symtabOff = UnsafeMutablePointer<nlist_64>(bitPattern: linkedBase + Int(symtabCmd.pointee.symoff))
-    let strtabOff =  UnsafeMutablePointer<UInt8>(bitPattern: linkedBase + Int(symtabCmd.pointee.stroff))
-    let dynamicSymtabOff = UnsafeMutablePointer<UInt32>(bitPattern: linkedBase + Int(dynamicSymtabCmd.pointee.indirectsymoff))
+    let symtab = UnsafeMutablePointer<nlist_64>(bitPattern: linkedBase + Int(symtabCmd.pointee.symoff))
+    let strtab =  UnsafeMutablePointer<UInt8>(bitPattern: linkedBase + Int(symtabCmd.pointee.stroff))
+    let indirectsym = UnsafeMutablePointer<UInt32>(bitPattern: linkedBase + Int(dynamicSymtabCmd.pointee.indirectsymoff))
     
-    if symtabOff == nil || strtabOff == nil || dynamicSymtabOff == nil {
+    if symtab == nil || strtab == nil || indirectsym == nil {
         return
     }
     
-    // __Data
-    // sections
-    cur = OpaquePointer(UnsafeRawPointer(image).advanced(by: MemoryLayout<mach_header_64>.size))
-    let segDataNameBytes = SEG_DATA.data(using: String.Encoding.utf8)!.map({ Int8($0) })
+    // __Data sections
+    cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
+    let seg_data = SEG_DATA.data(using: String.Encoding.utf8)!.map({ Int8($0) })
     
     for _ in 0..<image.pointee.ncmds {
-        let curSegCmd = UnsafeMutablePointer<segment_command_64>(cur)
-        cur = OpaquePointer(UnsafeRawPointer(cur).advanced(by: Int(curSegCmd.pointee.cmdsize)))
+        let curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
+        cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
         
-        if curSegCmd.pointee.segname.0 == segDataNameBytes[0],
-            curSegCmd.pointee.segname.1 == segDataNameBytes[1],
-            curSegCmd.pointee.segname.2 == segDataNameBytes[2],
-            curSegCmd.pointee.segname.3 == segDataNameBytes[3],
-            curSegCmd.pointee.segname.4 == segDataNameBytes[4],
-            curSegCmd.pointee.segname.5 == segDataNameBytes[5]
+        if curSegCmd.pointee.segname.0 == seg_data[0],
+            curSegCmd.pointee.segname.1 == seg_data[1],
+            curSegCmd.pointee.segname.2 == seg_data[2],
+            curSegCmd.pointee.segname.3 == seg_data[3],
+            curSegCmd.pointee.segname.4 == seg_data[4],
+            curSegCmd.pointee.segname.5 == seg_data[5]
         {
             for j in 0..<curSegCmd.pointee.nsects {
-                let cur = UnsafeRawPointer(curSegCmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(j))
-                let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur))
+                let cur_section_pointer = UnsafeRawPointer(curSegCmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(j))
+                let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur_section_pointer))
+                
+                // symbol_pointers sections
                 if curSection.pointee.flags == S_LAZY_SYMBOL_POINTERS {
-                    rebindSymbolPointerWithSection(curSection, symtab: symtabOff!, strtab: strtabOff!, dynamicSymtab: dynamicSymtabOff!, slide: slide, symbolName: symbolBytes, newMethod: newMethod, oldMethod: &oldMethod)
+                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbolBytes, newMethod: newMethod, oldMethod: &oldMethod)
                 }
                 if curSection.pointee.flags == S_NON_LAZY_SYMBOL_POINTERS {
-                    rebindSymbolPointerWithSection(curSection, symtab: symtabOff!, strtab: strtabOff!, dynamicSymtab: dynamicSymtabOff!, slide: slide, symbolName: symbolBytes, newMethod: newMethod, oldMethod: &oldMethod)
+                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbolBytes, newMethod: newMethod, oldMethod: &oldMethod)
                 }
             }
         }
@@ -122,36 +122,33 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
 private func rebindSymbolPointerWithSection(_ section: UnsafeMutablePointer<section_64>,
                                            symtab: UnsafeMutablePointer<nlist_64>,
                                            strtab: UnsafeMutablePointer<UInt8>,
-                                           dynamicSymtab: UnsafeMutablePointer<UInt32>,
+                                           indirectsym: UnsafeMutablePointer<UInt32>,
                                            slide: Int,
                                            symbolName: [UInt8],
                                            newMethod: UnsafeMutableRawPointer,
                                            oldMethod: inout UnsafeMutableRawPointer?)
 {
-    let indirectSymAddr = dynamicSymtab.advanced(by: Int(section.pointee.reserved1))
-    let sectionAddr = UnsafeMutablePointer<UnsafeMutableRawPointer>(bitPattern: slide+Int(section.pointee.addr))
+    let indirectSym_vm_addr = indirectsym.advanced(by: Int(section.pointee.reserved1))
+    let section_vm_addr = UnsafeMutablePointer<UnsafeMutableRawPointer>(bitPattern: slide+Int(section.pointee.addr))
     
-    if sectionAddr == nil {
+    if section_vm_addr == nil {
         return
     }
     
-    for i in 0..<Int(section.pointee.size)/MemoryLayout<UnsafeMutableRawPointer>.size {
-        let curIndirectSym = indirectSymAddr.advanced(by: i)
+Label: for i in 0..<Int(section.pointee.size)/MemoryLayout<UnsafeMutableRawPointer>.size {
+        let curIndirectSym = indirectSym_vm_addr.advanced(by: i)
         if (curIndirectSym.pointee == INDIRECT_SYMBOL_ABS || curIndirectSym.pointee == INDIRECT_SYMBOL_LOCAL) {
-            continue;
+            continue
         }
         let curStrTabOff = symtab.advanced(by: Int(curIndirectSym.pointee)).pointee.n_un.n_strx
         let curSymbolName = strtab.advanced(by: Int(curStrTabOff))
         
-        var isEqual = true
         for i in 0..<symbolName.count {
             if symbolName[i] != curSymbolName.advanced(by: i+1).pointee {
-                isEqual = false
+                continue Label
             }
         }
-        if isEqual {
-            oldMethod = sectionAddr!.advanced(by: i).pointee
-            sectionAddr!.advanced(by: i).initialize(to: newMethod)
-        }
+        oldMethod = section_vm_addr!.advanced(by: i).pointee
+        section_vm_addr!.advanced(by: i).initialize(to: newMethod)
     }
 }

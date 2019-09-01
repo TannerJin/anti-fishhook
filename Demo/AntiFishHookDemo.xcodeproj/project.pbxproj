@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7EFE685A87327E9026B35743 /* Pods_AntiFishHookDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C21AC4DC82D9A834A6D03DD9 /* Pods_AntiFishHookDemo.framework */; };
+		A91D91F42318CA9B00813AD0 /* Abort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91D91F32318CA9B00813AD0 /* Abort.swift */; };
 		A95B34F322CBBAF50078B3D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95B34F222CBBAF50078B3D4 /* AppDelegate.swift */; };
 		A95B34F522CBBAF50078B3D4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95B34F422CBBAF50078B3D4 /* ViewController.swift */; };
 		A95B34F822CBBAF50078B3D4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95B34F622CBBAF50078B3D4 /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		6742C61F627160A76D2A78EF /* Pods-AntiFishHookDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AntiFishHookDemo.debug.xcconfig"; path = "Target Support Files/Pods-AntiFishHookDemo/Pods-AntiFishHookDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		A91D91F32318CA9B00813AD0 /* Abort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Abort.swift; sourceTree = "<group>"; };
 		A95B34EF22CBBAF50078B3D4 /* AntiFishHookDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AntiFishHookDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95B34F222CBBAF50078B3D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A95B34F422CBBAF50078B3D4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				A95B350B22CBBBB40078B3D4 /* Dladdr.swift */,
 				A95B350A22CBBBB40078B3D4 /* NSLog.swift */,
 				A95B350922CBBBB40078B3D4 /* Dlopen.swift */,
+				A91D91F32318CA9B00813AD0 /* Abort.swift */,
 			);
 			path = TestCase;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				A95B350F22CBBBB40078B3D4 /* Dladdr.swift in Sources */,
 				A95B350E22CBBBB40078B3D4 /* NSLog.swift in Sources */,
 				A95B34F522CBBAF50078B3D4 /* ViewController.swift in Sources */,
+				A91D91F42318CA9B00813AD0 /* Abort.swift in Sources */,
 				A95B34F322CBBAF50078B3D4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

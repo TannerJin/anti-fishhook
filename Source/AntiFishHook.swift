@@ -9,12 +9,9 @@
 import Foundation
 import MachO
 
-// __TEXT
-fileprivate let __text_seg_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) = (0x5f, 0x5f, 0x54, 0x45, 0x58, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 // __stub_helper
-fileprivate let __stub_helper_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) = (0x5f, 0x5f, 0x73, 0x74, 0x75, 0x62, 0x5f, 0x68, 0x65, 0x6c, 0x70, 0x65, 0x72, 0x00, 0x00, 0x00)
-// __Linkedit
-fileprivate let __linkedit_seg_name: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) = (0x5f, 0x5f, 0x4c, 0x49, 0x4e, 0x4b, 0x45, 0x44, 0x49, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+fileprivate let __stub_helper_section: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) = (0x5f, 0x5f, 0x73, 0x74, 0x75, 0x62, 0x5f, 0x68, 0x65, 0x6c, 0x70, 0x65, 0x72, 0x00, 0x00, 0x00)
+
 
 @inline(__always)
 @_cdecl("resetSymbol")  // support Swift, C, Objc...
@@ -39,40 +36,40 @@ public func resetSymbol(_ symbol: [UInt8],
     
     var dyldInfoCmd: UnsafeMutablePointer<dyld_info_command>!
     
-    var curSegCommand: UnsafeMutablePointer<segment_command_64>!
-    var cur = OpaquePointer(UnsafeRawPointer(image).advanced(by: MemoryLayout<mach_header_64>.size))
+    var curSegCmd: UnsafeMutablePointer<segment_command_64>!
+    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
     
     for _ in 0..<image.pointee.ncmds {
-        curSegCommand = UnsafeMutablePointer<segment_command_64>(cur)
-        cur = OpaquePointer(UnsafeRawPointer(cur).advanced(by: Int(curSegCommand.pointee.cmdsize)))
+        curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
+        cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
         
-        if curSegCommand.pointee.cmd == LC_SEGMENT_64 {
-            if UInt8(curSegCommand.pointee.segname.0) == linkeditCmdName[0],
-                UInt8(curSegCommand.pointee.segname.1) == linkeditCmdName[1],
-                UInt8(curSegCommand.pointee.segname.2) == linkeditCmdName[2],
-                UInt8(curSegCommand.pointee.segname.3) == linkeditCmdName[3],
-                UInt8(curSegCommand.pointee.segname.4) == linkeditCmdName[4],
-                UInt8(curSegCommand.pointee.segname.5) == linkeditCmdName[5],
-                UInt8(curSegCommand.pointee.segname.6) == linkeditCmdName[6],
-                UInt8(curSegCommand.pointee.segname.7) == linkeditCmdName[7],
-                UInt8(curSegCommand.pointee.segname.8) == linkeditCmdName[8],
-                UInt8(curSegCommand.pointee.segname.9) == linkeditCmdName[9]
+        if curSegCmd.pointee.cmd == LC_SEGMENT_64 {
+            if UInt8(curSegCmd.pointee.segname.0) == linkeditCmdName[0],
+                UInt8(curSegCmd.pointee.segname.1) == linkeditCmdName[1],
+                UInt8(curSegCmd.pointee.segname.2) == linkeditCmdName[2],
+                UInt8(curSegCmd.pointee.segname.3) == linkeditCmdName[3],
+                UInt8(curSegCmd.pointee.segname.4) == linkeditCmdName[4],
+                UInt8(curSegCmd.pointee.segname.5) == linkeditCmdName[5],
+                UInt8(curSegCmd.pointee.segname.6) == linkeditCmdName[6],
+                UInt8(curSegCmd.pointee.segname.7) == linkeditCmdName[7],
+                UInt8(curSegCmd.pointee.segname.8) == linkeditCmdName[8],
+                UInt8(curSegCmd.pointee.segname.9) == linkeditCmdName[9]
             {
-                linkeditCmd = curSegCommand
+                linkeditCmd = curSegCmd
             }
-        } else if curSegCommand.pointee.cmd == LC_DYLD_INFO_ONLY || curSegCommand.pointee.cmd == LC_DYLD_INFO {
-            dyldInfoCmd = UnsafeMutablePointer<dyld_info_command>(OpaquePointer(UnsafeRawPointer(curSegCommand)))
+        } else if curSegCmd.pointee.cmd == LC_DYLD_INFO_ONLY || curSegCmd.pointee.cmd == LC_DYLD_INFO {
+            dyldInfoCmd = UnsafeMutablePointer<dyld_info_command>(OpaquePointer(UnsafeRawPointer(curSegCmd)))
         }
     }
     
     if linkeditCmd == nil || dyldInfoCmd == nil { return }
     
     let linkeditBase = UInt64(slide) + linkeditCmd.pointee.vmaddr - linkeditCmd.pointee.fileoff
-    let lazyBindOffsetInfo_vm_addr = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
-    let bindOffsetInfo_vm_addr = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)
+    let lazyBindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
+    let bindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)
     
-    func findSymbolAt(section_vm_addr: UInt64, section_size: UInt32) {
-        guard let section_pointer = UnsafeMutablePointer<UInt8>(bitPattern: Int(section_vm_addr)) else { return }
+    func findSymbolAt(bindInfo_vm_addr: UInt64, section_size: UInt32) {
+        guard let section_pointer = UnsafeMutablePointer<UInt8>(bitPattern: Int(bindInfo_vm_addr)) else { return }
         
         var index: Int?
         let _symbol = [0x5f] + symbol    // _symbol(Name Mangling), support Swift(notice Swift Name Mangling)
@@ -92,77 +89,90 @@ public func resetSymbol(_ symbol: [UInt8],
         }
 
         if let offset = index, offset >= 5, offset + _symbol.count <= size {
-            findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, symbol_data_offset: offset - 5)
+            findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, symbol_bindInfo_offset: offset - 5)
         }
     }
     
-    findSymbolAt(section_vm_addr: lazyBindOffsetInfo_vm_addr, section_size: dyldInfoCmd.pointee.lazy_bind_size)
-    findSymbolAt(section_vm_addr: bindOffsetInfo_vm_addr, section_size: dyldInfoCmd.pointee.bind_size)
+    findSymbolAt(bindInfo_vm_addr: lazyBindInfoCmd, section_size: dyldInfoCmd.pointee.lazy_bind_size)
+    findSymbolAt(bindInfo_vm_addr: bindInfoCmd, section_size: dyldInfoCmd.pointee.bind_size)
 }
 
 @inline(__always)
 private func findCodeVMAddr(symbol: [UInt8],
                                image: UnsafePointer<mach_header>,
                                imageSlide slide: Int,
-                               symbol_data_offset: Int)
+                               symbol_bindInfo_offset: Int)
 {
-    var curSegCommand: UnsafeMutablePointer<segment_command_64>!
-    var cur = OpaquePointer(UnsafeRawPointer(image).advanced(by: MemoryLayout<mach_header_64>.size))
+    var curSegCmd: UnsafeMutablePointer<segment_command_64>!
+    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
+    
+    // __Text sections
+    let seg_text = SEG_TEXT.data(using: String.Encoding.utf8)!.map({ Int8($0) })
+    var seg_text_cmd: UnsafeMutablePointer<segment_command_64>!
     
     for _ in 0..<image.pointee.ncmds {
-        curSegCommand = UnsafeMutablePointer<segment_command_64>(cur)
-        cur = OpaquePointer(UnsafeRawPointer(cur).advanced(by: Int(curSegCommand.pointee.cmdsize)))
+        curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
+        cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
         
-        if UInt8(curSegCommand.pointee.segname.0) == __text_seg_name.0,
-            UInt8(curSegCommand.pointee.segname.1) == __text_seg_name.1,
-            UInt8(curSegCommand.pointee.segname.2) == __text_seg_name.2,
-            UInt8(curSegCommand.pointee.segname.3) == __text_seg_name.3,
-            UInt8(curSegCommand.pointee.segname.4) == __text_seg_name.4,
-            UInt8(curSegCommand.pointee.segname.5) == __text_seg_name.5
+        if seg_text.count > 5,
+            UInt8(curSegCmd.pointee.segname.0) == seg_text[0],
+            UInt8(curSegCmd.pointee.segname.1) == seg_text[1],
+            UInt8(curSegCmd.pointee.segname.2) == seg_text[2],
+            UInt8(curSegCmd.pointee.segname.3) == seg_text[3],
+            UInt8(curSegCmd.pointee.segname.4) == seg_text[4],
+            UInt8(curSegCmd.pointee.segname.5) == seg_text[5]
         {
+            seg_text_cmd = curSegCmd
             break
         }
     }
     
-    var section: UnsafeMutablePointer<section_64>!
-    for i in 0..<curSegCommand.pointee.nsects {
-        let _cur_section = UnsafeRawPointer(curSegCommand).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(i))
-        let cur_section = UnsafeMutablePointer<section_64>(OpaquePointer(_cur_section))
+    // __stub_helper section
+    if seg_text_cmd == nil { return }
+    var stub_helper_section: UnsafeMutablePointer<section_64>!
+    
+    for i in 0..<seg_text_cmd.pointee.nsects {
+        let cur_section_pointer = UnsafeRawPointer(seg_text_cmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(i))
+        let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur_section_pointer))
         
-        if UInt8(cur_section.pointee.sectname.0) == __stub_helper_name.0,
-            UInt8(cur_section.pointee.sectname.1) == __stub_helper_name.1,
-            UInt8(cur_section.pointee.sectname.2) == __stub_helper_name.2,
-            UInt8(cur_section.pointee.sectname.3) == __stub_helper_name.3,
-            UInt8(cur_section.pointee.sectname.4) == __stub_helper_name.4,
-            UInt8(cur_section.pointee.sectname.5) == __stub_helper_name.5,
-            UInt8(cur_section.pointee.sectname.6) == __stub_helper_name.6,
-            UInt8(cur_section.pointee.sectname.7) == __stub_helper_name.7,
-            UInt8(cur_section.pointee.sectname.8) == __stub_helper_name.8,
-            UInt8(cur_section.pointee.sectname.9) == __stub_helper_name.9,
-            UInt8(cur_section.pointee.sectname.10) == __stub_helper_name.10,
-            UInt8(cur_section.pointee.sectname.11) == __stub_helper_name.11,
-            UInt8(cur_section.pointee.sectname.12) == __stub_helper_name.12
+        if UInt8(curSection.pointee.sectname.0) == __stub_helper_section.0,
+            UInt8(curSection.pointee.sectname.1) == __stub_helper_section.1,
+            UInt8(curSection.pointee.sectname.2) == __stub_helper_section.2,
+            UInt8(curSection.pointee.sectname.3) == __stub_helper_section.3,
+            UInt8(curSection.pointee.sectname.4) == __stub_helper_section.4,
+            UInt8(curSection.pointee.sectname.5) == __stub_helper_section.5,
+            UInt8(curSection.pointee.sectname.6) == __stub_helper_section.6,
+            UInt8(curSection.pointee.sectname.7) == __stub_helper_section.7,
+            UInt8(curSection.pointee.sectname.8) == __stub_helper_section.8,
+            UInt8(curSection.pointee.sectname.9) == __stub_helper_section.9,
+            UInt8(curSection.pointee.sectname.10) == __stub_helper_section.10,
+            UInt8(curSection.pointee.sectname.11) == __stub_helper_section.11,
+            UInt8(curSection.pointee.sectname.12) == __stub_helper_section.12
         {
-            section = cur_section
+            stub_helper_section = curSection
             break
         }
     }
     
-    guard let stub_helper_section = section,
-        let stubHelperVMAddr = UnsafeMutablePointer<UInt32>.init(bitPattern: slide+Int(stub_helper_section.pointee.addr)) else {
+    // find code vm addr
+    guard stub_helper_section != nil,
+        let stubHelper_vm_addr = UnsafeMutablePointer<UInt32>(bitPattern: slide+Int(stub_helper_section.pointee.addr)) else {
             return
         }
     
     var codeOffset: Int!
     for i in 0..<stub_helper_section.pointee.size/4 {
-        if stubHelperVMAddr.advanced(by: Int(i)).pointee == symbol_data_offset {
+        // ldr w16 .byte
+        // b stub(dyld_stub_binder)
+        // .byte: symbol_bindInfo_offset
+        if stubHelper_vm_addr.advanced(by: Int(i)).pointee == symbol_bindInfo_offset {
             codeOffset = Int(i)
             break
         }
     }
     if codeOffset == nil { return }
     
-    let pointer = stubHelperVMAddr.advanced(by: (codeOffset-2))
+    let pointer = stubHelper_vm_addr.advanced(by: (codeOffset-2))
     let newMethod = UnsafeMutablePointer(pointer)
     var oldMethod: UnsafeMutableRawPointer? = nil
     replaceSymbol(symbol, image: image, imageSlide: slide, newMethod: newMethod, oldMethod: &oldMethod)

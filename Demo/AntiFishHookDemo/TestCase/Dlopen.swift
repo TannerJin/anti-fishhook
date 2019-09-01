@@ -33,13 +33,13 @@ func testDlopen() {
 
 private func verificationDlopen() {
     let handle = dlopen("/usr/lib/libc.dylib", RTLD_NOW)
+    defer {
+        dlclose(handle)
+    }
     
     if handle == nil {
         print("I(dlopen) have been fishhook 😂")
     } else {
-        defer {
-            dlclose(handle)
-        }
         print("dlopen test success🚀🚀🚀")
     }
 }

@@ -28,6 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // MARK: - dlopen method
         testDlopen()
         
+        // MARK: - abort method, will crash
+//        testAbort()
+        
         return true
     }
 
