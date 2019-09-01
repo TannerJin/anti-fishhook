@@ -54,7 +54,7 @@ NSLog("Hello World")
 
 ### Note
 
- Run or test in your phone instend of simulator   
+ Run or test in your phone(arm64) instend of simulator   
  [`Swift Function name mangling`][Swift Name Mangling]
 
 ### Suggestion
