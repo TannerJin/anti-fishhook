@@ -163,8 +163,8 @@ private func findCodeVMAddr(symbol: [UInt8],
     var codeOffset: Int!
     for i in 0..<stub_helper_section.pointee.size/4 {
         // ldr w16 .byte
-        // b stub(dyld_stub_binder)
-        // .byte: symbol_bindInfo_offset
+        // b stub       # dyld_stub_binder
+        // .byte        # symbol_bindInfo_offset
         if stubHelper_vm_addr.advanced(by: Int(i)).pointee == symbol_bindInfo_offset {
             codeOffset = Int(i)
             break
