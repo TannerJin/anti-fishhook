@@ -174,7 +174,7 @@ private func findCodeVMAddr(symbol: [UInt8],
     }
     if codeOffset == nil { return }
     
-    let pointer = stubHelper_vm_addr.advanced(by: (codeOffset-2))
+    let pointer = stubHelper_vm_addr.advanced(by: (codeOffset-2))  // ldr w16 .long
     let newMethod = UnsafeMutablePointer(pointer)
     var oldMethod: UnsafeMutableRawPointer? = nil
     replaceSymbol(symbol, image: image, imageSlide: slide, newMethod: newMethod, oldMethod: &oldMethod)
