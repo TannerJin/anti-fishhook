@@ -168,13 +168,31 @@ private func findCodeVMAddr(symbol: [UInt8],
             .long: symbol_bindInfo_offset
          */
         if stubHelper_vm_addr.advanced(by: Int(i)).pointee == symbol_bindInfo_offset {
-            codeOffset = Int(i)
-            break
+            /*   ldr w16, #8  ARM Architecture Reference Manual
+
+                 0x18000050 is feature at IDA, so decompile instruction
+             
+                 31  28 27 25
+                 +-----------------------------------------------------------------------+
+                 |cond | 100 | P | U | S | W | L | Rn |         register list            |
+                 +-----------------------------------------------------------------------+
+             
+                 If R15 is specified as register Rn, the value used is the address of the instruction plus eight.
+             */
+            if i < 2 { continue }
+            let instruction = stubHelper_vm_addr.advanced(by: Int(i-2)).pointee
+            let ldr = (instruction & (7 << 25)) >> 25
+            let r16 = instruction & (31 << 0)
+            
+            if ldr == 4 && r16 == 16 {
+                codeOffset = Int(i-2)
+                break
+            }
         }
     }
     if codeOffset == nil { return }
     
-    let pointer = stubHelper_vm_addr.advanced(by: (codeOffset-2))  // ldr w16 .long
+    let pointer = stubHelper_vm_addr.advanced(by: (codeOffset))  // ldr w16 .long
     let newMethod = UnsafeMutablePointer(pointer)
     var oldMethod: UnsafeMutableRawPointer? = nil
     replaceSymbol(symbol, image: image, imageSlide: slide, newMethod: newMethod, oldMethod: &oldMethod)
