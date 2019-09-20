@@ -1,6 +1,6 @@
 # AntiFishhook
 
-__AntiFishhook__ is an AntiHook library for [`fishhook`][fishhook] at runtime.
+__AntiFishhook__ is an AntiHook library for [`fishhook`][fishhook] at runtime(make fishhook don't work).
 
 [fishhook]: https://github.com/facebook/fishhook
 [Swift Name Mangling]: https://www.mikeash.com/pyblog/friday-qa-2014-08-15-swift-name-mangling.html
