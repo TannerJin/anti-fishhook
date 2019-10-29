@@ -10,24 +10,21 @@ import Foundation
 import MachO
 
 // __stub_helper
-fileprivate let __stub_helper_section: (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8) = (0x5f, 0x5f, 0x73, 0x74, 0x75, 0x62, 0x5f, 0x68, 0x65, 0x6c, 0x70, 0x65, 0x72, 0x00, 0x00, 0x00)
+fileprivate let __stub_helper_section: (Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8) = (0x5f, 0x5f, 0x73, 0x74, 0x75, 0x62, 0x5f, 0x68, 0x65, 0x6c, 0x70, 0x65, 0x72, 0x00, 0x00, 0x00)
 
 
 @inline(__always)
 @_cdecl("resetSymbol")  // support Swift, C, Objc...
-public func resetSymbol(_ symbol: String)
-{
-    guard let symbolBytes = symbol.data(using: String.Encoding.utf8)?.map({ $0 }) else { return }
-    
+public func resetSymbol(_ symbol: String) {
     for i in 0..<_dyld_image_count() {
         if let image = _dyld_get_image_header(i) {
-            resetSymbol(symbolBytes, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
+            resetSymbol(symbol, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
         }
     }
 }
 
 @inline(__always)
-public func resetSymbol(_ symbol: [UInt8],
+public func resetSymbol(_ symbol: String,
                          image: UnsafePointer<mach_header>,
                          imageSlide slide: Int)
 {
@@ -68,41 +65,20 @@ public func resetSymbol(_ symbol: [UInt8],
     let lazyBindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
     let bindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)
     
-    func findSymbolAt(bindInfo_vm_addr: UInt64, section_size: UInt32) {
-        guard let section_pointer = UnsafeMutablePointer<UInt8>(bitPattern: Int(bindInfo_vm_addr)) else { return }
+    if !findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, bindInfoCmd: UnsafePointer<UInt8>(bitPattern: UInt(lazyBindInfoCmd)), bindInfoSymbolNameOffset: 6) {
         
-        var index: Int?
-        let _symbol = [0x5f] + symbol    // _symbol(Name Mangling), support Swift(notice Swift Name Mangling)
-        let size = Int(section_size)
-        for i in 0..<size {
-            var contains = true
-     Label: for j in 0..<_symbol.count {
-                if section_pointer[i+j] != _symbol[j] {
-                    contains = false
-                    break Label
-                }
-            }
-            if contains {
-                index = i
-                break
-            }
-        }
-
-        if let offset = index, offset >= 5, offset + _symbol.count <= size {
-            findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, symbol_bindInfo_offset: offset - 5)
-        }
+        findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, bindInfoCmd: UnsafePointer<UInt8>(bitPattern: UInt(bindInfoCmd)), bindInfoSymbolNameOffset: 2) // 2 or 3? TODO
     }
-    
-    findSymbolAt(bindInfo_vm_addr: lazyBindInfoCmd, section_size: dyldInfoCmd.pointee.lazy_bind_size)
-    findSymbolAt(bindInfo_vm_addr: bindInfoCmd, section_size: dyldInfoCmd.pointee.bind_size)
 }
 
 @inline(__always)
-private func findCodeVMAddr(symbol: [UInt8],
+@discardableResult
+private func findCodeVMAddr(symbol: String,
                                image: UnsafePointer<mach_header>,
                                imageSlide slide: Int,
-                               symbol_bindInfo_offset: Int)
-{
+                               bindInfoCmd: UnsafePointer<UInt8>!,
+                               bindInfoSymbolNameOffset: Int) -> Bool {
+    if bindInfoCmd == nil { return false }
     var curSegCmd: UnsafeMutablePointer<segment_command_64>!
     var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
     
@@ -128,26 +104,26 @@ private func findCodeVMAddr(symbol: [UInt8],
     }
     
     // __stub_helper section
-    if seg_text_cmd == nil { return }
+    if seg_text_cmd == nil { return false }
     var stub_helper_section: UnsafeMutablePointer<section_64>!
     
     for i in 0..<seg_text_cmd.pointee.nsects {
         let cur_section_pointer = UnsafeRawPointer(seg_text_cmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(i))
         let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur_section_pointer))
         
-        if UInt8(curSection.pointee.sectname.0) == __stub_helper_section.0,
-            UInt8(curSection.pointee.sectname.1) == __stub_helper_section.1,
-            UInt8(curSection.pointee.sectname.2) == __stub_helper_section.2,
-            UInt8(curSection.pointee.sectname.3) == __stub_helper_section.3,
-            UInt8(curSection.pointee.sectname.4) == __stub_helper_section.4,
-            UInt8(curSection.pointee.sectname.5) == __stub_helper_section.5,
-            UInt8(curSection.pointee.sectname.6) == __stub_helper_section.6,
-            UInt8(curSection.pointee.sectname.7) == __stub_helper_section.7,
-            UInt8(curSection.pointee.sectname.8) == __stub_helper_section.8,
-            UInt8(curSection.pointee.sectname.9) == __stub_helper_section.9,
-            UInt8(curSection.pointee.sectname.10) == __stub_helper_section.10,
-            UInt8(curSection.pointee.sectname.11) == __stub_helper_section.11,
-            UInt8(curSection.pointee.sectname.12) == __stub_helper_section.12
+        if curSection.pointee.sectname.0 == __stub_helper_section.0,
+            curSection.pointee.sectname.1 == __stub_helper_section.1,
+            curSection.pointee.sectname.2 == __stub_helper_section.2,
+            curSection.pointee.sectname.3 == __stub_helper_section.3,
+            curSection.pointee.sectname.4 == __stub_helper_section.4,
+            curSection.pointee.sectname.5 == __stub_helper_section.5,
+            curSection.pointee.sectname.6 == __stub_helper_section.6,
+            curSection.pointee.sectname.7 == __stub_helper_section.7,
+            curSection.pointee.sectname.8 == __stub_helper_section.8,
+            curSection.pointee.sectname.9 == __stub_helper_section.9,
+            curSection.pointee.sectname.10 == __stub_helper_section.10,
+            curSection.pointee.sectname.11 == __stub_helper_section.11,
+            curSection.pointee.sectname.12 == __stub_helper_section.12
         {
             stub_helper_section = curSection
             break
@@ -157,43 +133,51 @@ private func findCodeVMAddr(symbol: [UInt8],
     // find code vm addr
     guard stub_helper_section != nil,
         let stubHelper_vm_addr = UnsafeMutablePointer<UInt32>(bitPattern: slide+Int(stub_helper_section.pointee.addr)) else {
-            return
+            return false
         }
     
     var codeOffset: Int!
-    for i in 0..<stub_helper_section.pointee.size/4 {
+    // 5 instructions: code of dyld_stub_binder
+    for i in 5..<stub_helper_section.pointee.size/4 {
         /*
             ldr w16 .long
             b: stub(dyld_stub_binder)
             .long: symbol_bindInfo_offset
          */
-        if stubHelper_vm_addr.advanced(by: Int(i)).pointee == symbol_bindInfo_offset {
-            /*   ldr w16, #8  ARM Architecture Reference Manual
+        
+        /*   ldr w16, #8  ARM Architecture Reference Manual
 
-                 0x18000050 is feature at IDA, so decompile instruction
-             
-                 31  28 27 25
-                 +-----------------------------------------------------------------------+
-                 |cond | 100 | P | U | S | W | L | Rn |         register list            |
-                 +-----------------------------------------------------------------------+
-             
-                 If R15 is specified as register Rn, the value used is the address of the instruction plus eight.
-             */
-            if i < 2 { continue }
-            let instruction = stubHelper_vm_addr.advanced(by: Int(i-2)).pointee
-            let ldr = (instruction & (7 << 25)) >> 25
-            let r16 = instruction & (31 << 0)
+             0x18000050 is feature at IDA, so decompile instruction
+         
+             31  28 27 25
+             +-----------------------------------------------------------------------+
+             |cond | 100 | P | U | S | W | L | Rn |         register list            |
+             +-----------------------------------------------------------------------+
+         
+             If R15 is specified as register Rn, the value used is the address of the instruction plus eight.
+         */
+        let instruction = stubHelper_vm_addr.advanced(by: Int(i)).pointee
+        let ldr = (instruction & (7 << 25)) >> 25
+        let r16 = instruction & (31 << 0)
+        
+        // 100 && r16
+        if ldr == 4 && r16 == 16 {
+            let long_bytes = stubHelper_vm_addr.advanced(by: Int(i+2)).pointee
             
-            if ldr == 4 && r16 == 16 {
-                codeOffset = Int(i-2)
+            // _symbol
+            if String(cString: bindInfoCmd.advanced(by: Int(long_bytes)+bindInfoSymbolNameOffset)) == symbol {
+                codeOffset = Int(i)
                 break
             }
         }
     }
-    if codeOffset == nil { return }
+    
+    if codeOffset == nil { return false }
     
     let pointer = stubHelper_vm_addr.advanced(by: (codeOffset))  // ldr w16 .long
     let newMethod = UnsafeMutablePointer(pointer)
     var oldMethod: UnsafeMutableRawPointer? = nil
     replaceSymbol(symbol, image: image, imageSlide: slide, newMethod: newMethod, oldMethod: &oldMethod)
+    
+    return true
 }

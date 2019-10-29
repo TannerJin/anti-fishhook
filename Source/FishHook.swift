@@ -14,28 +14,27 @@ public func replaceSymbol(_ symbol: String,
                           newMethod: UnsafeMutableRawPointer,
                           oldMethod: inout UnsafeMutableRawPointer?)
 {
-    guard let symbolBytes = symbol.data(using: String.Encoding.utf8)?.map({ $0 }) else { return }
     for i in 0..<_dyld_image_count() {
         if let image = _dyld_get_image_header(i) {
-            replaceSymbol(symbolBytes, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i), newMethod: newMethod, oldMethod: &oldMethod)
+            replaceSymbol(symbol, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i), newMethod: newMethod, oldMethod: &oldMethod)
         }
     }
 }
 
 @inline(__always)
-public func replaceSymbol(_ symbol: [UInt8],
+public func replaceSymbol(_ symbol: String,
                           image: UnsafePointer<mach_header>,
                           imageSlide slide: Int,
                           newMethod: UnsafeMutableRawPointer,
                           oldMethod: inout UnsafeMutableRawPointer?)
 {
-    rebindSymbolForImage(image, imageSlide: slide, symbolBytes: symbol, newMethod: newMethod, oldMethod: &oldMethod)
+    rebindSymbolForImage(image, imageSlide: slide, symbol: symbol, newMethod: newMethod, oldMethod: &oldMethod)
 }
 
 @inline(__always)
 private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
                                  imageSlide slide: Int,
-                                 symbolBytes: [UInt8],
+                                 symbol: String,
                                  newMethod: UnsafeMutableRawPointer,
                                  oldMethod: inout UnsafeMutableRawPointer?)
 {
@@ -108,10 +107,10 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
                 
                 // symbol_pointers sections
                 if curSection.pointee.flags == S_LAZY_SYMBOL_POINTERS {
-                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbolBytes, newMethod: newMethod, oldMethod: &oldMethod)
+                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbol, newMethod: newMethod, oldMethod: &oldMethod)
                 }
                 if curSection.pointee.flags == S_NON_LAZY_SYMBOL_POINTERS {
-                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbolBytes, newMethod: newMethod, oldMethod: &oldMethod)
+                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbol, newMethod: newMethod, oldMethod: &oldMethod)
                 }
             }
         }
@@ -124,7 +123,7 @@ private func rebindSymbolPointerWithSection(_ section: UnsafeMutablePointer<sect
                                            strtab: UnsafeMutablePointer<UInt8>,
                                            indirectsym: UnsafeMutablePointer<UInt32>,
                                            slide: Int,
-                                           symbolName: [UInt8],
+                                           symbolName: String,
                                            newMethod: UnsafeMutableRawPointer,
                                            oldMethod: inout UnsafeMutableRawPointer?)
 {
@@ -141,14 +140,12 @@ Label: for i in 0..<Int(section.pointee.size)/MemoryLayout<UnsafeMutableRawPoint
             continue
         }
         let curStrTabOff = symtab.advanced(by: Int(curIndirectSym.pointee)).pointee.n_un.n_strx
-        let curSymbolName = strtab.advanced(by: Int(curStrTabOff))
-        
-        for i in 0..<symbolName.count {
-            if symbolName[i] != curSymbolName.advanced(by: i+1).pointee {
-                continue Label
-            }
+        let curSymbolName = strtab.advanced(by: Int(curStrTabOff+1))
+    
+        if String(cString: curSymbolName) == symbolName {
+            oldMethod = section_vm_addr!.advanced(by: i).pointee
+            section_vm_addr!.advanced(by: i).initialize(to: newMethod)
+            break
         }
-        oldMethod = section_vm_addr!.advanced(by: i).pointee
-        section_vm_addr!.advanced(by: i).initialize(to: newMethod)
     }
 }

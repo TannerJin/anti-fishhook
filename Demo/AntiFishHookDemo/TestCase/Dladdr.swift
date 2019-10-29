@@ -51,10 +51,8 @@ private func resetDladdrSymbol() {
         if let name = _dyld_get_image_name(i) {
             let imageName = String(cString: name)
             if imageName.contains("AntiFishHookDemo"),
-                let symbol = "dladdr".data(using: String.Encoding.utf8)?.map({$0}),
-                let image = _dyld_get_image_header(i)
-            {
-                resetSymbol(symbol, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
+                let image = _dyld_get_image_header(i) {
+                resetSymbol("dladdr", image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
                 break
             }
         }

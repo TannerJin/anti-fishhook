@@ -23,10 +23,8 @@ public func fishhookDladdr(newMethod: UnsafeMutableRawPointer) {
         if let name = _dyld_get_image_name(i) {
             let imageName = String(cString: name)
             if imageName.contains("AntiFishHookDemo"),
-                let symbol = "dladdr".data(using: String.Encoding.utf8)?.map({$0}),
-                let image = _dyld_get_image_header(i)
-            {
-                replaceSymbol(symbol, image: image, imageSlide: _dyld_get_image_vmaddr_slide(i), newMethod: newMethod, oldMethod: &oldMethod)
+                let image = _dyld_get_image_header(i) {
+                replaceSymbol("dladdr", image: image, imageSlide: _dyld_get_image_vmaddr_slide(i), newMethod: newMethod, oldMethod: &oldMethod)
                 break
             }
         }
