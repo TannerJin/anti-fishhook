@@ -28,52 +28,66 @@ public func replaceSymbol(_ symbol: String,
                           newMethod: UnsafeMutableRawPointer,
                           oldMethod: inout UnsafeMutableRawPointer?)
 {
-    rebindSymbolForImage(image, imageSlide: slide, symbol: symbol, newMethod: newMethod, oldMethod: &oldMethod)
+    replaceSymbolAtImage(image, imageSlide: slide, symbol: symbol, newMethod: newMethod, oldMethod: &oldMethod)
 }
 
 @inline(__always)
-private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
+private func replaceSymbolAtImage(_ image: UnsafePointer<mach_header>,
                                  imageSlide slide: Int,
                                  symbol: String,
                                  newMethod: UnsafeMutableRawPointer,
                                  oldMethod: inout UnsafeMutableRawPointer?)
 {
-    // __Linkedit seg cmd
+    // __Linkedit cmd
+    var linkeditCmd: UnsafeMutablePointer<segment_command_64>!
     let linkeditName = SEG_LINKEDIT.data(using: String.Encoding.utf8)!.map({ $0 })
     
-    var linkeditCmd: UnsafeMutablePointer<segment_command_64>!
+    // Symbol cmd
     var symtabCmd: UnsafeMutablePointer<symtab_command>!
     var dynamicSymtabCmd: UnsafeMutablePointer<dysymtab_command>!
     
-    var curSegCmd: UnsafeMutablePointer<segment_command_64>!
-    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
+    // __Data cmd
+    var dataCmd: UnsafeMutablePointer<segment_command_64>!
+    let seg_data = SEG_DATA.data(using: String.Encoding.utf8)!.map({ Int8($0) })
+    
+    
+    guard var cur_cmd = UnsafeMutablePointer<segment_command_64>(bitPattern: UInt(bitPattern: image)+UInt(MemoryLayout<mach_header_64>.size)) else { return }
     
     for _ in 0..<image.pointee.ncmds {
-        curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
-        cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
+        cur_cmd = UnsafeMutableRawPointer(cur_cmd).advanced(by: Int(cur_cmd.pointee.cmdsize)).assumingMemoryBound(to: segment_command_64.self)
         
-        if curSegCmd.pointee.cmd == LC_SEGMENT_64 {
-            if UInt8(curSegCmd.pointee.segname.0) == linkeditName[0],
-                UInt8(curSegCmd.pointee.segname.1) == linkeditName[1],
-                UInt8(curSegCmd.pointee.segname.2) == linkeditName[2],
-                UInt8(curSegCmd.pointee.segname.3) == linkeditName[3],
-                UInt8(curSegCmd.pointee.segname.4) == linkeditName[4],
-                UInt8(curSegCmd.pointee.segname.5) == linkeditName[5],
-                UInt8(curSegCmd.pointee.segname.6) == linkeditName[6],
-                UInt8(curSegCmd.pointee.segname.7) == linkeditName[7],
-                UInt8(curSegCmd.pointee.segname.8) == linkeditName[8],
-                UInt8(curSegCmd.pointee.segname.9) == linkeditName[9]
-            {
-                linkeditCmd = curSegCmd
+        if cur_cmd.pointee.cmd == LC_SEGMENT_64 {
+            if UInt8(cur_cmd.pointee.segname.0) == linkeditName[0] &&
+                UInt8(cur_cmd.pointee.segname.1) == linkeditName[1] &&
+                UInt8(cur_cmd.pointee.segname.2) == linkeditName[2] &&
+                UInt8(cur_cmd.pointee.segname.3) == linkeditName[3] &&
+                UInt8(cur_cmd.pointee.segname.4) == linkeditName[4] &&
+                UInt8(cur_cmd.pointee.segname.5) == linkeditName[5] &&
+                UInt8(cur_cmd.pointee.segname.6) == linkeditName[6] &&
+                UInt8(cur_cmd.pointee.segname.7) == linkeditName[7] &&
+                UInt8(cur_cmd.pointee.segname.8) == linkeditName[8] &&
+                UInt8(cur_cmd.pointee.segname.9) == linkeditName[9] {
+                
+                linkeditCmd = cur_cmd
             }
-        } else if curSegCmd.pointee.cmd == LC_SYMTAB {
-            symtabCmd = UnsafeMutablePointer<symtab_command>(OpaquePointer(curSegCmd))
-        }  else if curSegCmd.pointee.cmd == LC_DYSYMTAB {
-            dynamicSymtabCmd = UnsafeMutablePointer<dysymtab_command>(OpaquePointer(curSegCmd))
+            if cur_cmd.pointee.segname.0 == seg_data[0] &&
+                cur_cmd.pointee.segname.1 == seg_data[1] &&
+                cur_cmd.pointee.segname.2 == seg_data[2] &&
+                cur_cmd.pointee.segname.3 == seg_data[3] &&
+                cur_cmd.pointee.segname.4 == seg_data[4] &&
+                cur_cmd.pointee.segname.5 == seg_data[5] {
+                
+                dataCmd = cur_cmd
+            }
+            
+        } else if cur_cmd.pointee.cmd == LC_SYMTAB {
+            symtabCmd = UnsafeMutablePointer<symtab_command>(OpaquePointer(cur_cmd))
+        }  else if cur_cmd.pointee.cmd == LC_DYSYMTAB {
+            dynamicSymtabCmd = UnsafeMutablePointer<dysymtab_command>(OpaquePointer(cur_cmd))
         }
     }
     
-    if linkeditCmd == nil || symtabCmd == nil || dynamicSymtabCmd == nil {
+    if linkeditCmd == nil || symtabCmd == nil || dynamicSymtabCmd == nil || dataCmd == nil {
         return
     }
     
@@ -86,39 +100,21 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
         return
     }
     
-    // __Data sections
-    cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
-    let seg_data = SEG_DATA.data(using: String.Encoding.utf8)!.map({ Int8($0) })
-    
-    for _ in 0..<image.pointee.ncmds {
-        let curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
-        cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
+    for j in 0..<dataCmd.pointee.nsects {
+        let cur_section = UnsafeMutableRawPointer(dataCmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(j)).assumingMemoryBound(to: section_64.self)
         
-        if curSegCmd.pointee.segname.0 == seg_data[0],
-            curSegCmd.pointee.segname.1 == seg_data[1],
-            curSegCmd.pointee.segname.2 == seg_data[2],
-            curSegCmd.pointee.segname.3 == seg_data[3],
-            curSegCmd.pointee.segname.4 == seg_data[4],
-            curSegCmd.pointee.segname.5 == seg_data[5]
-        {
-            for j in 0..<curSegCmd.pointee.nsects {
-                let cur_section_pointer = UnsafeRawPointer(curSegCmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(j))
-                let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur_section_pointer))
-                
-                // symbol_pointers sections
-                if curSection.pointee.flags == S_LAZY_SYMBOL_POINTERS {
-                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbol, newMethod: newMethod, oldMethod: &oldMethod)
-                }
-                if curSection.pointee.flags == S_NON_LAZY_SYMBOL_POINTERS {
-                    rebindSymbolPointerWithSection(curSection, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbol, newMethod: newMethod, oldMethod: &oldMethod)
-                }
-            }
+        // symbol_pointers sections
+        if cur_section.pointee.flags == S_LAZY_SYMBOL_POINTERS {
+            replaceSymbolPointerAtSection(cur_section, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbol, newMethod: newMethod, oldMethod: &oldMethod)
+        }
+        if cur_section.pointee.flags == S_NON_LAZY_SYMBOL_POINTERS {
+            replaceSymbolPointerAtSection(cur_section, symtab: symtab!, strtab: strtab!, indirectsym: indirectsym!, slide: slide, symbolName: symbol, newMethod: newMethod, oldMethod: &oldMethod)
         }
     }
 }
 
 @inline(__always)
-private func rebindSymbolPointerWithSection(_ section: UnsafeMutablePointer<section_64>,
+private func replaceSymbolPointerAtSection(_ section: UnsafeMutablePointer<section_64>,
                                            symtab: UnsafeMutablePointer<nlist_64>,
                                            strtab: UnsafeMutablePointer<UInt8>,
                                            indirectsym: UnsafeMutablePointer<UInt32>,

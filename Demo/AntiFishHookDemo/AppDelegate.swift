@@ -6,6 +6,7 @@
 //  Copyright © 2019 jintao. All rights reserved.
 //
 
+import antiFishhook
 import UIKit
 
 @UIApplicationMain

@@ -122,7 +122,7 @@
 		A95052A22251FE9000BFBC53 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = jintao;
 				TargetAttributes = {
 					A95052AA2251FE9000BFBC53 = {
@@ -321,7 +321,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6249167321D0F899E89EA65 /* Pods-InsertDyld.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -351,7 +350,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0729E6988353829E18A5ADBE /* Pods-InsertDyld.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
