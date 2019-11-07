@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // MARK: - Swift Foudation.NSLog method
         testSwiftNSLog()
         
-        // MARK: - dlopen method
+        // MARK: - dlopen method (async test)
         testDlopen()
         
         // MARK: - test abort method, will crash

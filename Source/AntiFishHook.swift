@@ -101,18 +101,18 @@ private func findCodeVMAddr(symbol: String,
         let cur_section_pointer = UnsafeRawPointer(text_cmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(i))
         let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur_section_pointer))
         
-        if curSection.pointee.sectname.0 == __stub_helper_section.0,
-            curSection.pointee.sectname.1 == __stub_helper_section.1,
-            curSection.pointee.sectname.2 == __stub_helper_section.2,
-            curSection.pointee.sectname.3 == __stub_helper_section.3,
-            curSection.pointee.sectname.4 == __stub_helper_section.4,
-            curSection.pointee.sectname.5 == __stub_helper_section.5,
-            curSection.pointee.sectname.6 == __stub_helper_section.6,
-            curSection.pointee.sectname.7 == __stub_helper_section.7,
-            curSection.pointee.sectname.8 == __stub_helper_section.8,
-            curSection.pointee.sectname.9 == __stub_helper_section.9,
-            curSection.pointee.sectname.10 == __stub_helper_section.10,
-            curSection.pointee.sectname.11 == __stub_helper_section.11,
+        if curSection.pointee.sectname.0 == __stub_helper_section.0 &&
+            curSection.pointee.sectname.1 == __stub_helper_section.1 &&
+            curSection.pointee.sectname.2 == __stub_helper_section.2 &&
+            curSection.pointee.sectname.3 == __stub_helper_section.3 &&
+            curSection.pointee.sectname.4 == __stub_helper_section.4 &&
+            curSection.pointee.sectname.5 == __stub_helper_section.5 &&
+            curSection.pointee.sectname.6 == __stub_helper_section.6 &&
+            curSection.pointee.sectname.7 == __stub_helper_section.7 &&
+            curSection.pointee.sectname.8 == __stub_helper_section.8 &&
+            curSection.pointee.sectname.9 == __stub_helper_section.9 &&
+            curSection.pointee.sectname.10 == __stub_helper_section.10 &&
+            curSection.pointee.sectname.11 == __stub_helper_section.11 &&
             curSection.pointee.sectname.12 == __stub_helper_section.12
         {
             stub_helper_section = curSection
