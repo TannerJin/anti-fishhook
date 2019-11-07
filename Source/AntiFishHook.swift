@@ -146,18 +146,25 @@ private func findCodeVMAddr(symbol: String,
          
              If R15 is specified as register Rn, the value used is the address of the instruction plus eight.
          */
+        
         let instruction = stubHelper_vm_addr.advanced(by: Int(i)).pointee
+        var condition = false
+        
+        #if arch(arm)
+        condition = instruction == 0xE59FC000   // LDR IP, [PC]
+        #elseif arch(arm64)
         let ldr = (instruction & (7 << 25)) >> 25
         let r16 = instruction & (31 << 0)
+        condition = ldr == 4 && r16 == 16       // 100 && r16
+        #endif
         
-        // 100 && r16
-        if ldr == 4 && r16 == 16 {
+        if condition {
             let bindingInfoOffset = stubHelper_vm_addr.advanced(by: Int(i+2)).pointee
             var p = bindingInfoOffset
             
             Label: while p < bindInfoSize  {
                 if bindInfoCmd.advanced(by: Int(p)).pointee == BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB {
-                    p += 3
+                    p += 3 // pass uleb128
                     continue Label
                 }
                 if bindInfoCmd.advanced(by: Int(p)).pointee == BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM {
