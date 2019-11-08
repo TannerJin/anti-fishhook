@@ -12,8 +12,20 @@ import MachO
 // __stub_helper
 fileprivate let __stub_helper_section: (Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8, Int8) = (0x5f, 0x5f, 0x73, 0x74, 0x75, 0x62, 0x5f, 0x68, 0x65, 0x6c, 0x70, 0x65, 0x72, 0x00, 0x00, 0x00)
 
-fileprivate let BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM = 0x40
-fileprivate let BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB = 0x72
+#if arch(arm)
+typealias _mach_header = mach_header
+typealias _segment_command = segment_command
+typealias _section = section
+let _LC_SEGMENT = LC_SEGMENT
+typealias _nlist = nlist
+#elseif arch(arm64)
+// arm64
+typealias _mach_header = mach_header_64
+typealias _segment_command = segment_command_64
+typealias _section = section_64
+let _LC_SEGMENT = LC_SEGMENT_64
+typealias _nlist = nlist_64
+#endif
 
 @inline(__always)
 @_cdecl("resetSymbol")  // support Swift, C, Objc...
@@ -31,21 +43,21 @@ public func resetSymbol(_ symbol: String,
                          imageSlide slide: Int) {
     // Linked CMD
     let linkeditCmdName = SEG_LINKEDIT.data(using: String.Encoding.utf8)!.map({ $0 })
-    var linkeditCmd: UnsafeMutablePointer<segment_command_64>!
+    var linkeditCmd: UnsafeMutablePointer<_segment_command>!
     var dyldInfoCmd: UnsafeMutablePointer<dyld_info_command>!
     
     // Text CMD
     let textCmdName = SEG_TEXT.data(using: String.Encoding.utf8)!.map({ Int8($0) })
-    var textCmd: UnsafeMutablePointer<segment_command_64>!
+    var textCmd: UnsafeMutablePointer<_segment_command>!
     
-    var curSegCmd: UnsafeMutablePointer<segment_command_64>!
-    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
+    var curSegCmd: UnsafeMutablePointer<_segment_command>!
+    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<_mach_header>.size)
     
     for _ in 0..<image.pointee.ncmds {
-        curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
+        curSegCmd = UnsafeMutablePointer<_segment_command>(OpaquePointer(cur_cmd_pointer))
         cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
         
-        if curSegCmd.pointee.cmd == LC_SEGMENT_64 {
+        if curSegCmd.pointee.cmd == _LC_SEGMENT {
             if (curSegCmd.pointee.segname.0 == linkeditCmdName[0] &&
                 curSegCmd.pointee.segname.1 == linkeditCmdName[1] &&
                 curSegCmd.pointee.segname.2 == linkeditCmdName[2] &&
@@ -75,9 +87,9 @@ public func resetSymbol(_ symbol: String,
     
     if linkeditCmd == nil || dyldInfoCmd == nil || textCmd == nil { return }
     
-    let linkeditBase = UInt64(slide) + linkeditCmd.pointee.vmaddr - linkeditCmd.pointee.fileoff
-    let lazyBindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
-    let bindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)
+    let linkeditBase = UInt(slide) + UInt(linkeditCmd.pointee.vmaddr) - UInt(linkeditCmd.pointee.fileoff)
+    let lazyBindInfoCmd = linkeditBase + UInt(dyldInfoCmd.pointee.lazy_bind_off)
+    let bindInfoCmd = linkeditBase + UInt(dyldInfoCmd.pointee.bind_off)
     
     // ImageLoaderMachO::getLazyBindingInfo
     if !findCodeVMAddr(symbol: symbol, image: image, imageSlide: slide, text_cmd: textCmd, bindInfoCmd: UnsafePointer<UInt8>(bitPattern: UInt(lazyBindInfoCmd)), bindInfoSize: Int(dyldInfoCmd.pointee.lazy_bind_size)) {
@@ -91,15 +103,15 @@ public func resetSymbol(_ symbol: String,
 private func findCodeVMAddr(symbol: String,
                                image: UnsafePointer<mach_header>,
                                imageSlide slide: Int,
-                               text_cmd: UnsafeMutablePointer<segment_command_64>,
+                               text_cmd: UnsafeMutablePointer<_segment_command>,
                                bindInfoCmd: UnsafePointer<UInt8>!,
                                bindInfoSize: Int) -> Bool {
     if bindInfoCmd == nil { return false }
-    var stub_helper_section: UnsafeMutablePointer<section_64>!
+    var stub_helper_section: UnsafeMutablePointer<_section>!
     
     for i in 0..<text_cmd.pointee.nsects {
-        let cur_section_pointer = UnsafeRawPointer(text_cmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(i))
-        let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur_section_pointer))
+        let cur_section_pointer = UnsafeRawPointer(text_cmd).advanced(by: MemoryLayout<_segment_command>.size + MemoryLayout<_section>.size*Int(i))
+        let curSection = UnsafeMutablePointer<_section>(OpaquePointer(cur_section_pointer))
         
         if curSection.pointee.sectname.0 == __stub_helper_section.0 &&
             curSection.pointee.sectname.1 == __stub_helper_section.1 &&

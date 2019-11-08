@@ -41,18 +41,18 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
     // __Linkedit seg cmd
     let linkeditName = SEG_LINKEDIT.data(using: String.Encoding.utf8)!.map({ $0 })
     
-    var linkeditCmd: UnsafeMutablePointer<segment_command_64>!
+    var linkeditCmd: UnsafeMutablePointer<_segment_command>!
     var symtabCmd: UnsafeMutablePointer<symtab_command>!
     var dynamicSymtabCmd: UnsafeMutablePointer<dysymtab_command>!
     
-    var curSegCmd: UnsafeMutablePointer<segment_command_64>!
-    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
+    var curSegCmd: UnsafeMutablePointer<_segment_command>!
+    var cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<_mach_header>.size)
     
     for _ in 0..<image.pointee.ncmds {
-        curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
+        curSegCmd = UnsafeMutablePointer<_segment_command>(OpaquePointer(cur_cmd_pointer))
         cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
         
-        if curSegCmd.pointee.cmd == LC_SEGMENT_64 {
+        if curSegCmd.pointee.cmd == _LC_SEGMENT {
             if UInt8(curSegCmd.pointee.segname.0) == linkeditName[0],
                 UInt8(curSegCmd.pointee.segname.1) == linkeditName[1],
                 UInt8(curSegCmd.pointee.segname.2) == linkeditName[2],
@@ -78,7 +78,7 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
     }
     
     let linkedBase = slide + Int(linkeditCmd.pointee.vmaddr) - Int(linkeditCmd.pointee.fileoff)
-    let symtab = UnsafeMutablePointer<nlist_64>(bitPattern: linkedBase + Int(symtabCmd.pointee.symoff))
+    let symtab = UnsafeMutablePointer<_nlist>(bitPattern: linkedBase + Int(symtabCmd.pointee.symoff))
     let strtab =  UnsafeMutablePointer<UInt8>(bitPattern: linkedBase + Int(symtabCmd.pointee.stroff))
     let indirectsym = UnsafeMutablePointer<UInt32>(bitPattern: linkedBase + Int(dynamicSymtabCmd.pointee.indirectsymoff))
     
@@ -87,11 +87,11 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
     }
     
     // __Data sections
-    cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<mach_header_64>.size)
+    cur_cmd_pointer = UnsafeMutableRawPointer(mutating: image).advanced(by: MemoryLayout<_mach_header>.size)
     let seg_data = SEG_DATA.data(using: String.Encoding.utf8)!.map({ Int8($0) })
     
     for _ in 0..<image.pointee.ncmds {
-        let curSegCmd = UnsafeMutablePointer<segment_command_64>(OpaquePointer(cur_cmd_pointer))
+        let curSegCmd = UnsafeMutablePointer<_segment_command>(OpaquePointer(cur_cmd_pointer))
         cur_cmd_pointer = cur_cmd_pointer.advanced(by: Int(curSegCmd.pointee.cmdsize))
         
         if curSegCmd.pointee.segname.0 == seg_data[0],
@@ -102,8 +102,8 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
             curSegCmd.pointee.segname.5 == seg_data[5]
         {
             for j in 0..<curSegCmd.pointee.nsects {
-                let cur_section_pointer = UnsafeRawPointer(curSegCmd).advanced(by: MemoryLayout<segment_command_64>.size + MemoryLayout<section_64>.size*Int(j))
-                let curSection = UnsafeMutablePointer<section_64>(OpaquePointer(cur_section_pointer))
+                let cur_section_pointer = UnsafeRawPointer(curSegCmd).advanced(by: MemoryLayout<_segment_command>.size + MemoryLayout<_section>.size*Int(j))
+                let curSection = UnsafeMutablePointer<_section>(OpaquePointer(cur_section_pointer))
                 
                 // symbol_pointers sections
                 if curSection.pointee.flags == S_LAZY_SYMBOL_POINTERS {
@@ -118,8 +118,8 @@ private func rebindSymbolForImage(_ image: UnsafePointer<mach_header>,
 }
 
 @inline(__always)
-private func rebindSymbolPointerWithSection(_ section: UnsafeMutablePointer<section_64>,
-                                           symtab: UnsafeMutablePointer<nlist_64>,
+private func rebindSymbolPointerWithSection(_ section: UnsafeMutablePointer<_section>,
+                                           symtab: UnsafeMutablePointer<_nlist>,
                                            strtab: UnsafeMutablePointer<UInt8>,
                                            indirectsym: UnsafeMutablePointer<UInt32>,
                                            slide: Int,
