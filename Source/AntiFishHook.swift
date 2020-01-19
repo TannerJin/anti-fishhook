@@ -182,7 +182,8 @@ private func rebindLazySymbol(symbol: String,
     return true
 }
 
-// Not Release
+/*  Not Release
+ 
 // if symbol is non_lazy_symbol
 // ImageLoader::recursiveBind => doBind => eachBind => bindAt => findByExportedSymbol
 @inline(__always)
@@ -231,7 +232,8 @@ Label: switch opcode {
         }
     }
 }
-
+ 
+*/
 
 // if symbol is non_lazy_symbol
 // ImageLoader::recursiveBind => doBind => eachBind => bindAt => findByExportedSymbol
