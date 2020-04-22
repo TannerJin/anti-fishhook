@@ -60,4 +60,4 @@ NSLog("Hello World")
 
 ### Suggestion
 
-Use by dragging source file to your project instend of pod
+Use by adding source file to your project instend of pod
