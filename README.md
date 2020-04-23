@@ -13,12 +13,11 @@ include `fishhook` and `anti-fishhook`
 ```swift
 import antiFishhook
 
-resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF")  // Swift's Foudation.NSLog
-resetSymbol("printf")                                  // printf
-  
+resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF")  // Swift's Foudation.NSLog  
 NSLog("Hello AntiFishHook")
-// print Hello AntiFishHook
 
+resetSymbol("printf")                                  // printf
+printf("Hello AntiFishHook")
 ```
 
 ### antiFishhook(C/Objc)
