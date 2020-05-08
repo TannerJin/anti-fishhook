@@ -6,6 +6,12 @@ include `fishhook` and `anti-fishhook`
 [fishhook]: https://github.com/facebook/fishhook
 [Swift Name Mangling]: https://www.mikeash.com/pyblog/friday-qa-2014-08-15-swift-name-mangling.html
 
+
+### Note
+
+ Run or test in your phone(arm64) instend of simulator   
+ [`Swift Function name mangling`][Swift Name Mangling]
+
 ## Usage
 
 ### antiFishhook(Swift)
@@ -50,12 +56,6 @@ NSLog("Hello World")
 // print Hello fishHook
 
 ```
-
-
-### Note
-
- Run or test in your phone(arm64) instend of simulator   
- [`Swift Function name mangling`][Swift Name Mangling]
 
 ### Suggestion
 
