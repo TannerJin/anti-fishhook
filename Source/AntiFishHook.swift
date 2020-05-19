@@ -150,18 +150,20 @@ private func rebindLazySymbol(symbol: String,
     
     // 5 instructions: code of dyld_stub_binder
     for i in 5..<stub_helper_section.pointee.size/4 {
-        /*
-            ldr w16 .long
-            b: stub(dyld_stub_binder)
-            .long: symbol_bindInfo_offset
+        /*  at C4.4.5 and C6.2.84 of ARM® Architecture Reference Manual
+            ldr w16, #8 (.byte)
+            b stub(br_dyld_stub_binder)
+            .byte: symbol_bindInfo_offset
          */
-
         let instruction = stubHelper_vm_addr.advanced(by: Int(i)).pointee
-        let ldr = (instruction & (7 << 25)) >> 25
-        let r16 = instruction & (31 << 0)
-        
-        // 100 && r16
-        if ldr == 4 && r16 == 16 {
+//        // ldr wt
+        let ldr = (instruction & ((1 << 8 - 1) << 24)) >> 24
+        let wt = instruction & 31
+        // #imm `00` sign = false
+        let imm19 = (instruction & ((1 << 19 - 1) << 5)) >> 5
+
+        // ldr w16, #8
+        if ldr == 0b00011000 && wt == 16 && (imm19 << 2) == 8 {
             let bindingInfoOffset = stubHelper_vm_addr.advanced(by: Int(i+2)).pointee
             var p = lazyBindingInfoStart.advanced(by: Int(bindingInfoOffset))
             
