@@ -97,10 +97,9 @@ public func resetSymbol(_ symbol: String,
     let lazyBindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off)
 //    let bindInfoCmd = linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off)
     
-    if !rebindLazySymbol(symbol: symbol, image: image, imageSlide: slide, text_cmd: textCmd, lazyBindInfoCmd: UnsafePointer<UInt8>(bitPattern: UInt(lazyBindInfoCmd)), lazyBindInfoSize: Int(dyldInfoCmd.pointee.lazy_bind_size)) {
+    _ = rebindLazySymbol(symbol: symbol, image: image, imageSlide: slide, text_cmd: textCmd, lazyBindInfoCmd: UnsafePointer<UInt8>(bitPattern: UInt(lazyBindInfoCmd)), lazyBindInfoSize: Int(dyldInfoCmd.pointee.lazy_bind_size))
         
-        rebindNonLazySymbol2(symbol, image: image, imageSlide: slide)
-    }
+    // TODO: rebindNonLazySymbol
 }
 
 // if symbol is LazySymbol
@@ -212,7 +211,7 @@ private func rebindLazySymbol(symbol: String,
     return true
 }
 
-/*  Not Release
+/*  TODO:
  
 // if symbol is non_lazy_symbol
 // ImageLoader::recursiveBind => doBind => eachBind => bindAt => findByExportedSymbol
@@ -231,40 +230,15 @@ private func rebindNonLazySymbol(_ symbol: String,
         let opcode = Int32(bindInfoCmd.pointee) & BIND_OPCODE_MASK
         let immediate = Int32(bindInfoCmd.pointee) & BIND_IMMEDIATE_MASK
         
-Label: switch opcode {
-        case BIND_OPCODE_SET_DYLIB_ORDINAL_IMM:
-            libraryOrdinal = Int(immediate)
-            
-        case BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM:
-            let symbolName = String(cString: bindInfoCmd.advanced(by: Int(i)+1))
-            let _symbolName = String(cString: bindInfoCmd.advanced(by: Int(i)+1 + 1))
-            
-            if symbolName == symbol || _symbolName == symbol, libraryOrdinal != nil {
-                break
-            }
-            libraryOrdinal = nil
-        default:
-            libraryOrdinal = nil
-            break Label
-        }
-    }
-    
-    if libraryOrdinal != nil, libraryOrdinal! <= all_load_dyld.count {
-        let dyldName = all_load_dyld[Int(libraryOrdinal!-1)]
-        
-        // 1.
-        let handle = dlopen(dyldName, RTLD_NOW)
-        // 2. Exported Symbol
-        if let symPointer = dlsym(handle, symbol) {
-            var oldMethod: UnsafeMutableRawPointer? = nil
-            // 3. replace
-            replaceSymbol(symbol, image: image, imageSlide: slide, newMethod: symPointer, oldMethod: &oldMethod)
-        }
     }
 }
  
 */
 
+
+/* Release: Some symbols may been strip at SymbolTable in this way
+   
+ */
 // if symbol is non_lazy_symbol
 // ImageLoader::recursiveBind => doBind => eachBind => bindAt => findByExportedSymbol
 @inline(__always)
