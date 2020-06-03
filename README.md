@@ -6,6 +6,7 @@ include `fishhook` and `anti-fishhook`
 [fishhook]: https://github.com/facebook/fishhook
 [Swift Name Mangling]: https://www.mikeash.com/pyblog/friday-qa-2014-08-15-swift-name-mangling.html
 
+[How it's work](https://github.com/TannerJin/IOSSecuritySuite/blob/master/IOSSecuritySuite/FishHookChecker.swift#L13)
 
 ### Note
 
