@@ -20,16 +20,15 @@ func newDladdr(a: UnsafeRawPointer, b:  UnsafeMutablePointer<Dl_info>) -> Int32 
 func testDladdr() {
     print("\n======> dladdr_test:")
     
-    let dladdr: NewDladdrMethod = newDladdr
+    let myDladdr: NewDladdrMethod = newDladdr
+    fishhookDladdr(newMethod: unsafeBitCast(myDladdr, to: UnsafeMutableRawPointer.self))
+    verifyDladdr()
     
-    fishhookDladdr(newMethod: unsafeBitCast(dladdr, to: UnsafeMutableRawPointer.self))
-    verificationDladdr() // print reslut
-    
-    resetDladdrSymbol()
-    verificationDladdr()
+    resetSymbol("dladdr")
+    verifyDladdr()
 }
 
-private func verificationDladdr() {
+private func verifyDladdr() {
     class BaseTest {
         @objc func baseTest() {
             print("baseTest")
@@ -42,19 +41,6 @@ private func verificationDladdr() {
             print("I(dladdr) have been fishhook 😂")
         } else if dladdr(UnsafeRawPointer(testImp), &info) == 1 {
             print("dladdr method path: ",  String(cString: info.dli_fname), "🚀🚀🚀")
-        }
-    }
-}
-
-private func resetDladdrSymbol() {
-    for i in 0..<_dyld_image_count() {
-        if let name = _dyld_get_image_name(i) {
-            let imageName = String(cString: name)
-            if imageName.contains("AntiFishHookDemo"),
-                let image = _dyld_get_image_header(i) {
-                resetSymbol("dladdr", image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
-                break
-            }
         }
     }
 }

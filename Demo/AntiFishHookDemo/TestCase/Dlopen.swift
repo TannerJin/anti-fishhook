@@ -6,7 +6,7 @@
 //  Copyright © 2019 jintao. All rights reserved.
 //
 
-import InsertDyld
+import MachO
 import Foundation
 import antiFishhook
 
@@ -17,29 +17,45 @@ func newDlopen(_ path: UnsafePointer<Int8>!, _ mode: Int32) -> UnsafeMutableRawP
 }
 
 func testDlopen() {
-    // during loading dyld, will call dlopen method. so wait dyld finish load(not thread safe),
-    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-        print("\n======> dlopen_test:")
-        
-        let dlopen: NewDlopen = newDlopen
-        
-        fishhookDlopen(newMethod: unsafeBitCast(dlopen, to: UnsafeMutableRawPointer.self))
-        verificationDlopen()
-        
-        resetSymbol("dlopen")
-        verificationDlopen()
-    }
+    print("\n======> dlopen_test:")
+    
+    let myDlopen: NewDlopen = newDlopen
+    fishhookDlopen(newMethod: unsafeBitCast(myDlopen, to: UnsafeMutableRawPointer.self))
+    verifyDlopen()
+    
+    resetDlopen()
+    verifyDlopen()
 }
 
-private func verificationDlopen() {
+private func verifyDlopen() {
     let handle = dlopen("/usr/lib/libc.dylib", RTLD_NOW)
-    defer {
-        dlclose(handle)
-    }
-    
+
     if handle == nil {
         print("I(dlopen) have been fishhook 😂")
     } else {
         print("dlopen test success🚀🚀🚀")
+    }
+}
+
+private func fishhookDlopen(newMethod: UnsafeMutableRawPointer) {
+    var oldMethod: UnsafeMutableRawPointer?
+    replaceSymbol("dlopen", newMethod: newMethod, oldMethod: &oldMethod)
+    
+    for i in 0..<_dyld_image_count() {
+        if let cName = _dyld_get_image_name(i), String(cString: cName).contains("AntiFishHookDemo"), let image = _dyld_get_image_header(i) {
+
+            replaceSymbol("dlopen", at: image, imageSlide: _dyld_get_image_vmaddr_slide(i), newMethod: newMethod, oldMethod: &oldMethod)
+            break
+        }
+    }
+}
+
+private func resetDlopen() {
+    for i in 0..<_dyld_image_count() {
+        if let cName = _dyld_get_image_name(i), String(cString: cName).contains("AntiFishHookDemo"), let image = _dyld_get_image_header(i) {
+
+            resetSymbol("dlopen", image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
+            break
+        }
     }
 }

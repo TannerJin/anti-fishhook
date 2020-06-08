@@ -103,8 +103,8 @@
 		A95B34F122CBBAF50078B3D4 /* AntiFishHookDemo */ = {
 			isa = PBXGroup;
 			children = (
-				A95B34F222CBBAF50078B3D4 /* AppDelegate.swift */,
 				A95B350422CBBB550078B3D4 /* TestCase */,
+				A95B34F222CBBAF50078B3D4 /* AppDelegate.swift */,
 				A95B34F422CBBAF50078B3D4 /* ViewController.swift */,
 				A95B350522CBBBA00078B3D4 /* AntiFishHookDemo-Bridging-Header.h */,
 				A95B34F622CBBAF50078B3D4 /* Main.storyboard */,
