@@ -43,18 +43,18 @@ printf("Hello AntiFishHook")
 ```swift
 typealias MyNSLog = @convention(thin) (_ format: String, _ args: CVarArg...) -> Void
 
-func my_NSLog(_ format: String, _ args: CVarArg...) {
+func myNSLog(_ format: String, _ args: CVarArg...) {
     print("Hello fishHook")
 }
 
-let my_nslog: MyNSLog  = my_NSLog
-let my_nslog_pointer = unsafeBitCast(my_nslog, to: UnsafeMutableRawPointer.self)
-var orig_nslog_pointer: UnsafeMutableRawPointer?
+let selfNSLog: MyNSLog  = myNSLog
+let selfNSLogPointer = unsafeBitCast(selfNSLog, to: UnsafeMutableRawPointer.self)
+var origNSLogPointer: UnsafeMutableRawPointer?
 
-replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: my_nslog_pointer, oldMethod: &orig_nslog_pointer)
+replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: selfNSLogPointer, oldMethod: &origNSLogPointer)
 
 NSLog("Hello World")
-// print Hello fishHook
+// will print Hello fishHook
 
 ```
 
