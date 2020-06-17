@@ -100,7 +100,7 @@ public func resetSymbol(_ symbol: String,
     // TODO: rebindNonLazySymbol
 }
 
-// MARK: - LazySymbol (wait to do)
+// MARK: - LazySymbol
 
 // if symbol is LazySymbol
 // dyld_stub_binder => fastBindLazySymbol => doBindFastLazySymbol => ImageLoaderMachO::getLazyBindingInfo
@@ -217,7 +217,7 @@ private func rebindLazySymbol(symbol: String,
     replaceSymbol(symbol, at: image, imageSlide: slide, newMethod: newMethod, oldMethod: &oldMethod)
 }
 
-// MARK: - NoLazySymbol
+// MARK: - NoLazySymbol (Wait to do)
 
 /*  TODO:
  
