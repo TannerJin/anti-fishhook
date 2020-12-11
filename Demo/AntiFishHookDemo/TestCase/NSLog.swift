@@ -20,15 +20,12 @@ func testSwiftNSLog() {
     print("\n======> Swift_Foudation.NSLog test:")
     
     let nslogSymbol = "$s10Foundation5NSLogyySS_s7CVarArg_pdtF"
-//    if let name = swift_demangle("_" + nslogSymbol) {
-//        print("_$s10Foundation5NSLogyySS_s7CVarArg_pdtF Demangle Name :", name, "\n")
-//    }
     
     let myNSLog: NewSwiftNSLog = newNSLog
     fishhookSwiftFoudationNSLog(nslogSymbol, newMethod: unsafeBitCast(myNSLog, to: UnsafeMutableRawPointer.self))
     NSLog("Swift's NSLog has not been fishhook。。。")
     
-    resetSymbol(nslogSymbol) // original: _$s10Foundation5NSLogyySS_s7CVarArg_pdtF
+    FishHookChecker.denyFishHook(nslogSymbol)
     NSLog("Swift NSLog test success🚀🚀🚀")
 }
 

@@ -17,7 +17,7 @@
 }
 
 + (void)antiFishhook {
-    resetSymbol(@"printf");
+//    resetSymbol(@"printf");
 }
 
 @end

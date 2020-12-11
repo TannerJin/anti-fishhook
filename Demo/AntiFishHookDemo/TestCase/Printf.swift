@@ -24,7 +24,7 @@ func testPrintf() {
     PrintfTestHelp.printf("Hello World")
     
     print("begin time=>: ", mach_absolute_time())
-    PrintfTestHelp.antiFishhook()
+    FishHookChecker.denyFishHook("printf")
     print("end time=>:", mach_absolute_time())
     PrintfTestHelp.printf("Hello World🚀🚀🚀\n")
 }

@@ -24,7 +24,7 @@ func testDladdr() {
     fishhookDladdr(newMethod: unsafeBitCast(myDladdr, to: UnsafeMutableRawPointer.self))
     verifyDladdr()
     
-    resetSymbol("dladdr")
+    FishHookChecker.denyFishHook("dladdr")
     verifyDladdr()
 }
 

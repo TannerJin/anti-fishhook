@@ -19,8 +19,8 @@
 		A95B350F22CBBBB40078B3D4 /* Dladdr.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95B350B22CBBBB40078B3D4 /* Dladdr.swift */; };
 		A95B351022CBBBB40078B3D4 /* Printf.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95B350C22CBBBB40078B3D4 /* Printf.swift */; };
 		A95B351322CBBBC30078B3D4 /* PrintfTestHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = A95B351222CBBBC30078B3D4 /* PrintfTestHelp.m */; };
-		A95B351522CBBC6C0078B3D4 /* InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95B351422CBBC6C0078B3D4 /* InsertDyld.framework */; };
-		A95B351622CBBC6C0078B3D4 /* InsertDyld.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A95B351422CBBC6C0078B3D4 /* InsertDyld.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9645C3D2583A70E00B10D67 /* InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9645C3C2583A70E00B10D67 /* InsertDyld.framework */; };
+		A9645C3E2583A70E00B10D67 /* InsertDyld.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9645C3C2583A70E00B10D67 /* InsertDyld.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,7 +30,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A95B351622CBBC6C0078B3D4 /* InsertDyld.framework in Embed Frameworks */,
+				A9645C3E2583A70E00B10D67 /* InsertDyld.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,7 +54,7 @@
 		A95B350C22CBBBB40078B3D4 /* Printf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Printf.swift; sourceTree = "<group>"; };
 		A95B351122CBBBC30078B3D4 /* PrintfTestHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintfTestHelp.h; sourceTree = "<group>"; };
 		A95B351222CBBBC30078B3D4 /* PrintfTestHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintfTestHelp.m; sourceTree = "<group>"; };
-		A95B351422CBBC6C0078B3D4 /* InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9645C3C2583A70E00B10D67 /* InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6BCA58A1DD2C3D5AE63D8EF /* Pods-AntiFishHookDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AntiFishHookDemo.release.xcconfig"; path = "Target Support Files/Pods-AntiFishHookDemo/Pods-AntiFishHookDemo.release.xcconfig"; sourceTree = "<group>"; };
 		C21AC4DC82D9A834A6D03DD9 /* Pods_AntiFishHookDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AntiFishHookDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -64,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A95B351522CBBC6C0078B3D4 /* InsertDyld.framework in Frameworks */,
+				A9645C3D2583A70E00B10D67 /* InsertDyld.framework in Frameworks */,
 				7EFE685A87327E9026B35743 /* Pods_AntiFishHookDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,7 +84,6 @@
 		A95B34E622CBBAF50078B3D4 = {
 			isa = PBXGroup;
 			children = (
-				A95B351422CBBC6C0078B3D4 /* InsertDyld.framework */,
 				A95B34F122CBBAF50078B3D4 /* AntiFishHookDemo */,
 				A95B34F022CBBAF50078B3D4 /* Products */,
 				1F0FF394B691361333B1BC47 /* Pods */,
@@ -132,6 +131,7 @@
 		C397C3335B9650638D35A622 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9645C3C2583A70E00B10D67 /* InsertDyld.framework */,
 				C21AC4DC82D9A834A6D03DD9 /* Pods_AntiFishHookDemo.framework */,
 			);
 			name = Frameworks;
@@ -410,7 +410,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZUK9CU4C3W;
+				DEVELOPMENT_TEAM = 4W4C99Z87Y;
 				INFOPLIST_FILE = AntiFishHookDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -434,7 +434,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZUK9CU4C3W;
+				DEVELOPMENT_TEAM = 4W4C99Z87Y;
 				INFOPLIST_FILE = AntiFishHookDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (

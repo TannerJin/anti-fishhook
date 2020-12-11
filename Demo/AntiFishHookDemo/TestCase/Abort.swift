@@ -13,7 +13,7 @@ func testAbort() {
     typealias Method = @convention(thin) ()->()
     let newMethod: Method = {
         print("======> abort_fishhook success:")
-        resetSymbol("abort")
+        FishHookChecker.denyFishHook("abort")
         print("======> abort_antiFishhook test:")
         abort() // if crash, abort antiFishhook success
     }
@@ -21,6 +21,6 @@ func testAbort() {
     var oldMethod: UnsafeMutableRawPointer?
     
     print("\n======> abort_test:")
-    replaceSymbol("abort", newMethod: unsafeBitCast(newMethod, to: UnsafeMutableRawPointer.self), oldMethod: &oldMethod)
+    FishHook.replaceSymbol("abort", newMethod: unsafeBitCast(newMethod, to: UnsafeMutableRawPointer.self), oldMethod: &oldMethod)
     abort()
 }

@@ -39,12 +39,12 @@ private func verifyDlopen() {
 
 private func fishhookDlopen(newMethod: UnsafeMutableRawPointer) {
     var oldMethod: UnsafeMutableRawPointer?
-    replaceSymbol("dlopen", newMethod: newMethod, oldMethod: &oldMethod)
+    FishHook.replaceSymbol("dlopen", newMethod: newMethod, oldMethod: &oldMethod)
     
     for i in 0..<_dyld_image_count() {
         if let cName = _dyld_get_image_name(i), String(cString: cName).contains("AntiFishHookDemo"), let image = _dyld_get_image_header(i) {
 
-            replaceSymbol("dlopen", at: image, imageSlide: _dyld_get_image_vmaddr_slide(i), newMethod: newMethod, oldMethod: &oldMethod)
+            FishHook.replaceSymbol("dlopen", at: image, imageSlide: _dyld_get_image_vmaddr_slide(i), newMethod: newMethod, oldMethod: &oldMethod)
             break
         }
     }
@@ -54,7 +54,7 @@ private func resetDlopen() {
     for i in 0..<_dyld_image_count() {
         if let cName = _dyld_get_image_name(i), String(cString: cName).contains("AntiFishHookDemo"), let image = _dyld_get_image_header(i) {
 
-            resetSymbol("dlopen", image: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
+            FishHookChecker.denyFishHook("dlopen", at: image, imageSlide: _dyld_get_image_vmaddr_slide(i))
             break
         }
     }

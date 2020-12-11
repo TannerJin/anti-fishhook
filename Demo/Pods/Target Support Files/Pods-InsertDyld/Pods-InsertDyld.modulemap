@@ -1,0 +1,6 @@
+framework module Pods_InsertDyld {
+  umbrella header "Pods-InsertDyld-umbrella.h"
+
+  export *
+  module * { export * }
+}

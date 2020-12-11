@@ -1,0 +1,6 @@
+framework module antiFishhook {
+  umbrella header "antiFishhook-umbrella.h"
+
+  export *
+  module * { export * }
+}
