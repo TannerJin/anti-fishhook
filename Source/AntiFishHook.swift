@@ -10,57 +10,53 @@ import Foundation
 import MachO
 
 #if arch(arm64)
-public class FishHookChecker {
+@inline(__always)
+private func readUleb128(ptr: inout UnsafeMutablePointer<UInt8>, end: UnsafeMutablePointer<UInt8>) -> UInt64 {
+    var result: UInt64 = 0
+    var bit = 0
+    var readNext = true
 
-    static private let BIND_TYPE_THREADED_REBASE = 102
-    
-    @inline(__always)
-    static private func readUleb128(ptr: inout UnsafeMutablePointer<UInt8>, end: UnsafeMutablePointer<UInt8>) -> UInt64 {
-        var result: UInt64 = 0
-        var bit = 0
-        var readNext = true
-
-        repeat {
-            if ptr == end {
-                assert(false, "malformed uleb128")
-            }
-            let slice = UInt64(ptr.pointee & 0x7f)
-            if bit > 63 {
-                assert(false, "uleb128 too big for uint64")
-            } else {
-                result |= (slice << bit)
-                bit += 7
-            }
-            readNext = ((ptr.pointee & 0x80) >> 7) == 1
-            ptr += 1
-        } while (readNext)
-        return result
-    }
-    
-    @inline(__always)
-    static private func readSleb128(ptr: inout UnsafeMutablePointer<UInt8>, end: UnsafeMutablePointer<UInt8>) -> Int64 {
-        var result: Int64 = 0
-        var bit: Int = 0
-        var byte: UInt8
-        
-        repeat {
-            if (ptr == end) {
-                assert(false, "malformed sleb128")
-            }
-            byte = ptr.pointee
-            result |= (((Int64)(byte & 0x7f)) << bit);
-            bit += 7
-            ptr += 1
-        } while (byte & 0x80) == 1;
-        
-        // sign extend negative numbers
-        if ( (byte & 0x40) != 0 ) {
-            result |= -1 << bit
+    repeat {
+        if ptr == end {
+            assert(false, "malformed uleb128")
         }
-        
-        return result
-    }
+        let slice = UInt64(ptr.pointee & 0x7f)
+        if bit > 63 {
+            assert(false, "uleb128 too big for uint64")
+        } else {
+            result |= (slice << bit)
+            bit += 7
+        }
+        readNext = ((ptr.pointee & 0x80) >> 7) == 1
+        ptr += 1
+    } while (readNext)
+    return result
+}
 
+@inline(__always)
+private func readSleb128(ptr: inout UnsafeMutablePointer<UInt8>, end: UnsafeMutablePointer<UInt8>) -> Int64 {
+    var result: Int64 = 0
+    var bit: Int = 0
+    var byte: UInt8
+    
+    repeat {
+        if (ptr == end) {
+            assert(false, "malformed sleb128")
+        }
+        byte = ptr.pointee
+        result |= (((Int64)(byte & 0x7f)) << bit)
+        bit += 7
+        ptr += 1
+    } while (byte & 0x80) == 1
+    
+    // sign extend negative numbers
+    if ( (byte & 0x40) != 0 ) {
+        result |= -1 << bit
+    }
+    return result
+}
+
+public class FishHookChecker {
     @inline(__always)
     static public func denyFishHook(_ symbol: String) {
         var symbolAddress: UnsafeMutableRawPointer?
@@ -68,7 +64,7 @@ public class FishHookChecker {
         for imgIndex in 0..<_dyld_image_count() {
             if let image = _dyld_get_image_header(imgIndex) {
                 if symbolAddress == nil {
-                    _ = lookSymbol(symbol, at: image, imageSlide: _dyld_get_image_vmaddr_slide(imgIndex), symbolAddress: &symbolAddress)
+                    _ = SymbolFound.lookSymbol(symbol, at: image, imageSlide: _dyld_get_image_vmaddr_slide(imgIndex), symbolAddress: &symbolAddress)
                 }
                 if let symbolPointer = symbolAddress {
                     var oldMethod: UnsafeMutableRawPointer?
@@ -79,28 +75,31 @@ public class FishHookChecker {
     }
     
     @inline(__always)
-    static public func denyFishHook(_ symbol: String,
-                             at image: UnsafePointer<mach_header>,
-                             imageSlide slide: Int) {
+    static public func denyFishHook(_ symbol: String, at image: UnsafePointer<mach_header>, imageSlide slide: Int) {
         var symbolAddress: UnsafeMutableRawPointer?
         
-        if lookSymbol(symbol, at: image, imageSlide: slide, symbolAddress: &symbolAddress), let symbolPointer = symbolAddress {
+        if SymbolFound.lookSymbol(symbol, at: image, imageSlide: slide, symbolAddress: &symbolAddress), let symbolPointer = symbolAddress {
             var oldMethod: UnsafeMutableRawPointer?
             FishHook.replaceSymbol(symbol, at: image, imageSlide: slide, newMethod: symbolPointer, oldMethod: &oldMethod)
         }
     }
+}
+
+// MARK: - SymbolFound
+internal class SymbolFound {
+    static private let BindTypeThreadedRebase = 102
 
     @inline(__always)
-    static func lookSymbol(_ symbol: String,
-                             at image: UnsafePointer<mach_header>,
-                             imageSlide slide: Int,
-                             symbolAddress: inout UnsafeMutableRawPointer?) -> Bool {
-        // Linked cmd
+    static func lookSymbol(_ symbol: String, at image: UnsafePointer<mach_header>, imageSlide slide: Int, symbolAddress: inout UnsafeMutableRawPointer?) -> Bool {
+        // target cmd
         var linkeditCmd: UnsafeMutablePointer<segment_command_64>!
         var dyldInfoCmd: UnsafeMutablePointer<dyld_info_command>!
         var allLoadDylds = [String]()
 
-        guard var curCmdPointer = UnsafeMutableRawPointer(bitPattern: UInt(bitPattern: image)+UInt(MemoryLayout<mach_header_64>.size)) else { return false }
+        guard var curCmdPointer = UnsafeMutableRawPointer(bitPattern: UInt(bitPattern: image)+UInt(MemoryLayout<mach_header_64>.size)) else {
+            return false
+        }
+        // all cmd
         for _ in 0..<image.pointee.ncmds {
             let curCmd = curCmdPointer.assumingMemoryBound(to: segment_command_64.self)
             
@@ -111,7 +110,7 @@ public class FishHookChecker {
                 if (curCmdName == SEG_LINKEDIT) {
                     linkeditCmd = curCmd
                 }
-            case LC_DYLD_INFO_ONLY:
+            case LC_DYLD_INFO_ONLY, UInt32(LC_DYLD_INFO):
                 dyldInfoCmd = curCmdPointer.assumingMemoryBound(to: dyld_info_command.self)
             case UInt32(LC_LOAD_DYLIB), LC_LOAD_WEAK_DYLIB, LC_LOAD_UPWARD_DYLIB, LC_REEXPORT_DYLIB:
                 let loadDyldCmd = curCmdPointer.assumingMemoryBound(to: dylib_command.self)
@@ -123,26 +122,26 @@ public class FishHookChecker {
                 break
             }
             
-            curCmdPointer = curCmdPointer + Int(curCmd.pointee.cmdsize)
+            curCmdPointer += Int(curCmd.pointee.cmdsize)
         }
 
         if linkeditCmd == nil || dyldInfoCmd == nil { return false }
         let linkeditBase = UInt64(slide + Int(linkeditCmd.pointee.vmaddr) - Int(linkeditCmd.pointee.fileoff))
         
         // look by LazyBindInfo
-        let lazyBindSize = dyldInfoCmd.pointee.lazy_bind_size
+        let lazyBindSize = Int(dyldInfoCmd.pointee.lazy_bind_size)
         if (lazyBindSize > 0) {
             if let lazyBindInfoCmd = UnsafeMutablePointer<UInt8>(bitPattern: UInt(linkeditBase + UInt64(dyldInfoCmd.pointee.lazy_bind_off))),
-               lookLazyBindSymbol(symbol, lazyBindInfoCmd: lazyBindInfoCmd, lazyBindInfoSize: Int(lazyBindSize), allDependentDylds: allLoadDylds, symbolAddress: &symbolAddress) {
+               lookLazyBindSymbol(symbol, symbolAddr: &symbolAddress, lazyBindInfoCmd: lazyBindInfoCmd, lazyBindInfoSize: lazyBindSize, allLoadDylds: allLoadDylds) {
                 return true
             }
         }
         
         // look by NonLazyBindInfo
-        let bindSize = dyldInfoCmd.pointee.bind_size
+        let bindSize = Int(dyldInfoCmd.pointee.bind_size)
         if (bindSize > 0) {
-            if let nonLazyBindInfoCmd = UnsafeMutablePointer<UInt8>(bitPattern: UInt(linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off))),
-               lookNonLazyBindSymbol(symbol, nonLazyBindInfoCmd: nonLazyBindInfoCmd, nonLazyBindInfoSize: Int(bindSize), allDependentDylds: allLoadDylds, symbolAddress: &symbolAddress) {
+            if let bindCmd = UnsafeMutablePointer<UInt8>(bitPattern: UInt(linkeditBase + UInt64(dyldInfoCmd.pointee.bind_off))),
+               lookBindSymbol(symbol, symbolAddr: &symbolAddress, bindInfoCmd: bindCmd, bindInfoSize: bindSize, allLoadDylds: allLoadDylds) {
                 return true
             }
         }
@@ -150,14 +149,86 @@ public class FishHookChecker {
         return false
     }
     
+    // LazySymbolBindInfo
     @inline(__always)
-    private static func lookNonLazyBindSymbol(_ symbol: String,
-                                         nonLazyBindInfoCmd: UnsafeMutablePointer<UInt8>,
-                                         nonLazyBindInfoSize: Int,
-                                         allDependentDylds: [String],
-                                         symbolAddress: inout UnsafeMutableRawPointer?) -> Bool {
-        var ptr = nonLazyBindInfoCmd
-        let bindingInfoEnd = nonLazyBindInfoCmd.advanced(by: Int(nonLazyBindInfoSize))
+    private static func lookLazyBindSymbol(_ symbol: String, symbolAddr: inout UnsafeMutableRawPointer?, lazyBindInfoCmd: UnsafeMutablePointer<UInt8>, lazyBindInfoSize: Int, allLoadDylds: [String]) -> Bool {
+        var ptr = lazyBindInfoCmd
+        let lazyBindingInfoEnd = lazyBindInfoCmd.advanced(by: Int(lazyBindInfoSize))
+        var ordinal: Int = -1
+        var foundSymbol = false
+        var addend = 0
+        var type: Int32 = 0
+        
+        Label: while ptr < lazyBindingInfoEnd {
+            let immediate = Int32(ptr.pointee) & BIND_IMMEDIATE_MASK
+            let opcode = Int32(ptr.pointee) & BIND_OPCODE_MASK
+            ptr += 1
+            
+            switch opcode {
+            case BIND_OPCODE_DONE:
+                continue
+                // ORDINAL DYLIB
+            case BIND_OPCODE_SET_DYLIB_ORDINAL_IMM:
+                ordinal = Int(immediate)
+            case BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB:
+                ordinal = Int(readUleb128(ptr: &ptr, end: lazyBindingInfoEnd))
+            case BIND_OPCODE_SET_DYLIB_SPECIAL_IMM:
+                if immediate == 0 {
+                   ordinal = 0
+                } else {
+                    ordinal = Int(BIND_OPCODE_MASK | immediate)
+                }
+                // symbol
+            case BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM:
+                let symbolName = String(cString: ptr + 1)
+                if (symbolName == symbol) {
+                    foundSymbol = true
+                }
+                while ptr.pointee != 0 {
+                    ptr += 1
+                }
+                ptr += 1 // '00'
+            case BIND_OPCODE_SET_TYPE_IMM:
+                type = immediate
+                continue
+                // sleb
+            case BIND_OPCODE_SET_ADDEND_SLEB:
+                addend = Int(readSleb128(ptr: &ptr, end: lazyBindingInfoEnd))
+                // uleb
+            case BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB, BIND_OPCODE_ADD_ADDR_ULEB:
+                _ = readUleb128(ptr: &ptr, end: lazyBindingInfoEnd)
+                // bind action
+            case BIND_OPCODE_DO_BIND:
+                if (foundSymbol) {
+                    break Label
+                } else {
+                    continue
+                }
+            default:
+                assert(false, "bad lazy bind opcode")
+                return false
+            }
+        }
+        
+        assert(ordinal <= allLoadDylds.count)
+
+        if (foundSymbol && ordinal >= 0 && allLoadDylds.count > 0), ordinal <= allLoadDylds.count, type != BindTypeThreadedRebase {
+            let imageName = allLoadDylds[ordinal-1]
+            var tmpSymbolAddress: UnsafeMutableRawPointer?
+            if lookExportedSymbol(symbol, exportImageName: imageName, symbolAddress: &tmpSymbolAddress), let symbolPointer = tmpSymbolAddress {
+                symbolAddr = symbolPointer + addend
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    // NonLazySymbolBindInfo
+    @inline(__always)
+    private static func lookBindSymbol(_ symbol: String, symbolAddr: inout UnsafeMutableRawPointer?, bindInfoCmd: UnsafeMutablePointer<UInt8>, bindInfoSize: Int, allLoadDylds: [String]) -> Bool {
+        var ptr = bindInfoCmd
+        let bindingInfoEnd = bindInfoCmd.advanced(by: Int(bindInfoSize))
         var ordinal: Int = -1
         var foundSymbol = false
         var addend = 0
@@ -185,7 +256,6 @@ public class FishHookChecker {
                 // symbol
             case BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM:
                 let symbolName = String(cString: ptr + 1)
-                print(symbolName)
                 if (symbolName == symbol) {
                     foundSymbol = true
                 }
@@ -241,12 +311,12 @@ public class FishHookChecker {
             }
         }
 
-        assert(ordinal <= allDependentDylds.count)
-        if (foundSymbol && ordinal >= 0 && allDependentDylds.count > 0), ordinal <= allDependentDylds.count, type != BIND_TYPE_THREADED_REBASE {
-            let imageName = allDependentDylds[ordinal-1]
-            var _symbolAddress: UnsafeMutableRawPointer?
-            if lookExportedSymbol(symbol, exportImageName: imageName, symbolAddress: &_symbolAddress), let symbolPointer = _symbolAddress {
-                symbolAddress = symbolPointer + addend
+        assert(ordinal <= allLoadDylds.count)
+        if (foundSymbol && ordinal >= 0 && allLoadDylds.count > 0), ordinal <= allLoadDylds.count, type != BindTypeThreadedRebase {
+            let imageName = allLoadDylds[ordinal-1]
+            var tmpSymbolAddress: UnsafeMutableRawPointer?
+            if lookExportedSymbol(symbol, exportImageName: imageName, symbolAddress: &tmpSymbolAddress), let symbolPointer = tmpSymbolAddress {
+                symbolAddr = symbolPointer + addend
                 return true
             }
         }
@@ -254,101 +324,20 @@ public class FishHookChecker {
         return false
     }
     
+    // ExportSymbol
     @inline(__always)
-    private static func lookLazyBindSymbol(_ symbol: String,
-                                         lazyBindInfoCmd: UnsafeMutablePointer<UInt8>,
-                                         lazyBindInfoSize: Int,
-                                         allDependentDylds: [String],
-                                         symbolAddress: inout UnsafeMutableRawPointer?) -> Bool {
-        var ptr = lazyBindInfoCmd
-        let lazyBindingInfoEnd = lazyBindInfoCmd.advanced(by: Int(lazyBindInfoSize))
-        var ordinal: Int = -1
-        var foundSymbol = false
-        var addend = 0
-        var type: Int32 = 0
-        
-        Label: while ptr < lazyBindingInfoEnd {
-            let immediate = Int32(ptr.pointee) & BIND_IMMEDIATE_MASK
-            let opcode = Int32(ptr.pointee) & BIND_OPCODE_MASK
-            ptr += 1
-            
-            switch opcode {
-            case BIND_OPCODE_DONE:
-                continue
-                // ORDINAL DYLIB
-            case BIND_OPCODE_SET_DYLIB_ORDINAL_IMM:
-                ordinal = Int(immediate)
-            case BIND_OPCODE_SET_DYLIB_ORDINAL_ULEB:
-                ordinal = Int(readUleb128(ptr: &ptr, end: lazyBindingInfoEnd))
-            case BIND_OPCODE_SET_DYLIB_SPECIAL_IMM:
-                if immediate == 0 {
-                   ordinal = 0
-                } else {
-                    ordinal = Int(BIND_OPCODE_MASK | immediate)
-                }
-                // symbol
-            case BIND_OPCODE_SET_SYMBOL_TRAILING_FLAGS_IMM:
-                let symbolName = String(cString: ptr + 1)
-//                print(symbolName)
-                if (symbolName == symbol) {
-                    foundSymbol = true
-                }
-                while ptr.pointee != 0 {
-                    ptr += 1
-                }
-                ptr += 1 // '00'
-            case BIND_OPCODE_SET_TYPE_IMM:
-                type = immediate
-                continue
-                // sleb
-            case BIND_OPCODE_SET_ADDEND_SLEB:
-                addend = Int(readSleb128(ptr: &ptr, end: lazyBindingInfoEnd))
-                // uleb
-            case BIND_OPCODE_SET_SEGMENT_AND_OFFSET_ULEB, BIND_OPCODE_ADD_ADDR_ULEB:
-                _ = readUleb128(ptr: &ptr, end: lazyBindingInfoEnd)
-                // bind action
-            case BIND_OPCODE_DO_BIND:
-                if (foundSymbol) {
-                    break Label
-                } else {
-                    continue
-                }
-            default:
-                assert(false, "bad lazy bind opcode")
-                return false
-            }
-        }
-        
-        assert(ordinal <= allDependentDylds.count)
-
-        if (foundSymbol && ordinal >= 0 && allDependentDylds.count > 0), ordinal <= allDependentDylds.count, type != BIND_TYPE_THREADED_REBASE {
-            let imageName = allDependentDylds[ordinal-1]
-            var _symbolAddress: UnsafeMutableRawPointer?
-            if lookExportedSymbol(symbol, exportImageName: imageName, symbolAddress: &_symbolAddress), let symbolPointer = _symbolAddress {
-                symbolAddress = symbolPointer + addend
-                return true
-            }
-        }
-        
-        return false
-    }
-    
-    @inline(__always)
-    private static func lookExportedSymbol(_ symbol: String,
-                                           exportImageName: String,
-                                           symbolAddress: inout UnsafeMutableRawPointer?) -> Bool
-    {
+    private static func lookExportedSymbol(_ symbol: String, exportImageName: String, symbolAddress: inout UnsafeMutableRawPointer?) -> Bool {
         var rpathImage: String?
         // @rpath
-        if (exportImageName.contains("@rpath")){
+        if (exportImageName.contains("@rpath")) {
             rpathImage = exportImageName.components(separatedBy: "/").last
         }
         
         for index in 0..<_dyld_image_count() {
-            let currentImage = String(cString: _dyld_get_image_name(index))
-                    
-            if let _rpathImage = rpathImage {
-                if (!currentImage.contains(_rpathImage)) {
+            // imageName
+            let currentImageName = String(cString: _dyld_get_image_name(index))
+            if let tmpRpathImage = rpathImage {
+                if (!currentImageName.contains(tmpRpathImage)) {
                     continue
                 }
             } else if (String(cString: _dyld_get_image_name(index)) != exportImageName) {
@@ -360,7 +349,7 @@ public class FishHookChecker {
                 symbolAddress = UnsafeMutableRawPointer(mutating: pointer)
                 return true
             } else {
-                // not found, look at ReExport dylib
+                // not found, look at ReExport dylibs
                 var allReExportDylibs = [String]()
                 
                 if let currentImage = _dyld_get_image_header(index),
@@ -370,12 +359,12 @@ public class FishHookChecker {
                         let curCmd = curCmdPointer.assumingMemoryBound(to: segment_command_64.self)
                         if (curCmd.pointee.cmd == LC_REEXPORT_DYLIB) {
                             let reExportDyldCmd = curCmdPointer.assumingMemoryBound(to: dylib_command.self)
-                            let reExportDyldNameOffset = Int(reExportDyldCmd.pointee.dylib.name.offset)
-                            let reExportDyldNamePointer = curCmdPointer.advanced(by: reExportDyldNameOffset).assumingMemoryBound(to: Int8.self)
-                            let reExportDyldName = String(cString: reExportDyldNamePointer)
+                            let nameOffset = Int(reExportDyldCmd.pointee.dylib.name.offset)
+                            let namePointer = curCmdPointer.advanced(by: nameOffset).assumingMemoryBound(to: Int8.self)
+                            let reExportDyldName = String(cString: namePointer)
                             allReExportDylibs.append(reExportDyldName)
                         }
-                        curCmdPointer = curCmdPointer + Int(curCmd.pointee.cmdsize)
+                        curCmdPointer += Int(curCmd.pointee.cmdsize)
                     }
                 }
                 
@@ -392,36 +381,56 @@ public class FishHookChecker {
         return false
     }
     
+    // look export symbol by export trie
     @inline(__always)
     static private func _lookExportedSymbol(_ symbol: String, image: UnsafePointer<mach_header>, imageSlide slide: Int) -> UnsafeMutableRawPointer? {
+        // target cmd
         var linkeditCmd: UnsafeMutablePointer<segment_command_64>!
         var dyldInfoCmd: UnsafeMutablePointer<dyld_info_command>!
+        var exportCmd: UnsafeMutablePointer<linkedit_data_command>!
 
         guard var curCmdPointer = UnsafeMutableRawPointer(bitPattern: UInt(bitPattern: image)+UInt(MemoryLayout<mach_header_64>.size)) else {
             return nil
         }
-        
+        // cmd
         for _ in 0..<image.pointee.ncmds {
             let curCmd = curCmdPointer.assumingMemoryBound(to: segment_command_64.self)
-            if curCmd.pointee.cmd == LC_SEGMENT_64 {
+            
+            switch UInt32(curCmd.pointee.cmd) {
+            case UInt32(LC_SEGMENT_64):
                 let offset = MemoryLayout.size(ofValue: curCmd.pointee.cmd) + MemoryLayout.size(ofValue: curCmd.pointee.cmdsize)
                 let curCmdName = String(cString: curCmdPointer.advanced(by: offset).assumingMemoryBound(to: Int8.self))
                 if (curCmdName == SEG_LINKEDIT) {
                     linkeditCmd = curCmd
                 }
-            } else if curCmd.pointee.cmd == LC_DYLD_INFO_ONLY {
+            case LC_DYLD_INFO_ONLY, UInt32(LC_DYLD_INFO):
                 dyldInfoCmd = curCmdPointer.assumingMemoryBound(to: dyld_info_command.self)
+            case LC_DYLD_EXPORTS_TRIE:
+                exportCmd = curCmdPointer.assumingMemoryBound(to: linkedit_data_command.self)
+            default:
+                break
             }
-            curCmdPointer = curCmdPointer + Int(curCmd.pointee.cmdsize)
+            
+            curCmdPointer += Int(curCmd.pointee.cmdsize)
         }
 
-        if linkeditCmd == nil || dyldInfoCmd == nil || dyldInfoCmd.pointee.export_size == 0 { return nil }
+        // export trie info
+        let hasDyldInfo = dyldInfoCmd != nil && dyldInfoCmd.pointee.export_size != 0
+        let hasExportTrie = exportCmd != nil && exportCmd.pointee.datasize != 0
+        if linkeditCmd == nil || (!hasDyldInfo && !hasExportTrie) {
+            return nil
+        }
+        
         let linkeditBase = Int(slide + Int(linkeditCmd.pointee.vmaddr) - Int(linkeditCmd.pointee.fileoff))
-        guard let exportedInfo = UnsafeMutableRawPointer(bitPattern: linkeditBase + Int(dyldInfoCmd.pointee.export_off))?.assumingMemoryBound(to: UInt8.self) else { return nil }
+        let exportOff = hasExportTrie ? exportCmd.pointee.dataoff : dyldInfoCmd.pointee.export_off
+        let exportSize = hasExportTrie ? exportCmd.pointee.datasize : dyldInfoCmd.pointee.export_size
+        
+        guard let exportedInfo = UnsafeMutableRawPointer(bitPattern: linkeditBase + Int(exportOff))?.assumingMemoryBound(to: UInt8.self) else { return nil }
         
         let start = exportedInfo
-        let end = exportedInfo + Int(dyldInfoCmd.pointee.export_size)
+        let end = exportedInfo + Int(exportSize)
              
+        // export symbol location
         if var symbolLocation = lookExportedSymbolByTrieWalk(targetSymbol: symbol, start: start, end: end, currentLocation: start, currentSymbol: "") {
             let flags = readUleb128(ptr: &symbolLocation, end: end)
 
@@ -433,6 +442,7 @@ public class FishHookChecker {
             
             switch flags & UInt64(EXPORT_SYMBOL_FLAGS_KIND_MASK) {
             case UInt64(EXPORT_SYMBOL_FLAGS_KIND_REGULAR):
+                // runResolver is false by bind or lazyBind
                 return returnSymbolAddress()
             case UInt64(EXPORT_SYMBOL_FLAGS_KIND_THREAD_LOCAL):
                 if (flags & UInt64(EXPORT_SYMBOL_FLAGS_STUB_AND_RESOLVER) != 0) {
@@ -452,53 +462,52 @@ public class FishHookChecker {
         return nil
     }
     
-    
+    // ExportSymbol
     @inline(__always)
     static private func lookExportedSymbolByTrieWalk(targetSymbol: String, start: UnsafeMutablePointer<UInt8>, end: UnsafeMutablePointer<UInt8>, currentLocation location: UnsafeMutablePointer<UInt8>, currentSymbol: String) -> UnsafeMutablePointer<UInt8>? {
-        var p = location
+        var ptr = location
         
-        while p <= end {
+        while ptr <= end {
             // terminalSize
-            var terminalSize = UInt64(p.pointee)
-            p += 1
+            var terminalSize = UInt64(ptr.pointee)
+            ptr += 1
             if terminalSize > 127 {
-                p -= 1
-                terminalSize = readUleb128(ptr: &p, end: end)
+                ptr -= 1
+                terminalSize = readUleb128(ptr: &ptr, end: end)
             }
             if terminalSize != 0 {
-                return currentSymbol == targetSymbol ? p : nil
+                return currentSymbol == targetSymbol ? ptr : nil
             }
             
             // children
-            let children = p.advanced(by: Int(terminalSize))
+            let children = ptr.advanced(by: Int(terminalSize))
             if children >= end {
                 // end
                 return nil
             }
             let childrenCount = children.pointee
-            p = children + 1
+            ptr = children + 1
             
             // nodes
             for _ in 0..<childrenCount {
-                let nodeLabel = p.withMemoryRebound(to: CChar.self, capacity: 1, { $0 })
+                let nodeLabel = ptr.withMemoryRebound(to: CChar.self, capacity: 1, { $0 })
                 
                 // node offset
-                while p.pointee != 0 {
-                    p += 1
+                while ptr.pointee != 0 {
+                    ptr += 1
                 }
-                p += 1  // = "00"
-                let nodeOffset = Int(readUleb128(ptr: &p, end: end))
+                ptr += 1  // = "00"
+                let nodeOffset = Int(readUleb128(ptr: &ptr, end: end))
                 
                 // node
                 if let nodeSymbol = String(cString: nodeLabel, encoding: .utf8) {
-                    let _currentSymbol = currentSymbol + nodeSymbol
-//                   print(_currentSymbol)    // for debug
-
-                    if !targetSymbol.contains(_currentSymbol) {
+                    let tmpCurrentSymbol = currentSymbol + nodeSymbol
+                    if !targetSymbol.contains(tmpCurrentSymbol) {
                         continue
                     }
                     if nodeOffset != 0 && (start + nodeOffset <= end) {
-                        if let symbolLocation = lookExportedSymbolByTrieWalk(targetSymbol: targetSymbol, start: start, end: end, currentLocation: start.advanced(by: nodeOffset), currentSymbol: _currentSymbol) {
+                        let location = start.advanced(by: nodeOffset)
+                        if let symbolLocation = lookExportedSymbolByTrieWalk(targetSymbol: targetSymbol, start: start, end: end, currentLocation: location, currentSymbol: tmpCurrentSymbol) {
                             return symbolLocation
                         }
                     }

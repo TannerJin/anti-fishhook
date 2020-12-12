@@ -21,6 +21,7 @@
 		A95B351322CBBBC30078B3D4 /* PrintfTestHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = A95B351222CBBBC30078B3D4 /* PrintfTestHelp.m */; };
 		A9645C3D2583A70E00B10D67 /* InsertDyld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9645C3C2583A70E00B10D67 /* InsertDyld.framework */; };
 		A9645C3E2583A70E00B10D67 /* InsertDyld.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9645C3C2583A70E00B10D67 /* InsertDyld.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9645C612584BB2100B10D67 /* Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9645C602584BB2100B10D67 /* Print.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +56,7 @@
 		A95B351122CBBBC30078B3D4 /* PrintfTestHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintfTestHelp.h; sourceTree = "<group>"; };
 		A95B351222CBBBC30078B3D4 /* PrintfTestHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintfTestHelp.m; sourceTree = "<group>"; };
 		A9645C3C2583A70E00B10D67 /* InsertDyld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = InsertDyld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9645C602584BB2100B10D67 /* Print.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Print.swift; sourceTree = "<group>"; };
 		B6BCA58A1DD2C3D5AE63D8EF /* Pods-AntiFishHookDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AntiFishHookDemo.release.xcconfig"; path = "Target Support Files/Pods-AntiFishHookDemo/Pods-AntiFishHookDemo.release.xcconfig"; sourceTree = "<group>"; };
 		C21AC4DC82D9A834A6D03DD9 /* Pods_AntiFishHookDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AntiFishHookDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -124,6 +126,7 @@
 				A95B350A22CBBBB40078B3D4 /* NSLog.swift */,
 				A95B350922CBBBB40078B3D4 /* Dlopen.swift */,
 				A91D91F32318CA9B00813AD0 /* Abort.swift */,
+				A9645C602584BB2100B10D67 /* Print.swift */,
 			);
 			path = TestCase;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				A95B350E22CBBBB40078B3D4 /* NSLog.swift in Sources */,
 				A95B34F522CBBAF50078B3D4 /* ViewController.swift in Sources */,
 				A91D91F42318CA9B00813AD0 /* Abort.swift in Sources */,
+				A9645C612584BB2100B10D67 /* Print.swift in Sources */,
 				A95B34F322CBBAF50078B3D4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
