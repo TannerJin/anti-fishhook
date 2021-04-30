@@ -55,7 +55,7 @@ public class FishHook {
                 if (curCmdName == SEG_LINKEDIT) {
                     linkeditCmd = curCmd
                 }
-                if (curCmdName == SEG_DATA) {
+                if (curCmdName == SEG_DATA || curCmdName == "__DATA_CONST") {
                     dataCmd = curCmd
                 }
             } else if curCmd.pointee.cmd == LC_SYMTAB {
