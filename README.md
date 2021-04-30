@@ -15,30 +15,20 @@ include `fishhook` and `anti-fishhook`
 
 ## Usage
 
-### antiFishhook(Swift)
+### antiFishhook
 
 ```swift
 import antiFishhook
 
-resetSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF")  // Swift's Foudation.NSLog  
+FishHookChecker.denyFishHook("$s10Foundation5NSLogyySS_s7CVarArg_pdtF")  // Swift's Foudation.NSLog  
 NSLog("Hello AntiFishHook")
 
-resetSymbol("printf")                                  // printf
+FishHookChecker.denyFishHook("printf")                                  // printf
 printf("Hello AntiFishHook")
 ```
 
-### antiFishhook(C/Objc)
 
-```Objective-C
-#include "antiFishhook-Swift.h"
-
-+ (void)antiFishhook {
-    resetSymbol(@"$s10Foundation5NSLogyySS_s7CVarArg_pdtF");  // Swift's Foudation.NSLog
-    resetSymbol(@"printf");                                 // printf
-}
-```
-
-### fishhook(just for Swift)
+### fishhook
 
 ```swift
 typealias MyNSLog = @convention(thin) (_ format: String, _ args: CVarArg...) -> Void
@@ -51,7 +41,7 @@ let selfNSLog: MyNSLog  = myNSLog
 let selfNSLogPointer = unsafeBitCast(selfNSLog, to: UnsafeMutableRawPointer.self)
 var origNSLogPointer: UnsafeMutableRawPointer?
 
-replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: selfNSLogPointer, oldMethod: &origNSLogPointer)
+FishHook.replaceSymbol("$s10Foundation5NSLogyySS_s7CVarArg_pdtF", newMethod: selfNSLogPointer, oldMethod: &origNSLogPointer)
 
 NSLog("Hello World")
 // will print Hello fishHook
